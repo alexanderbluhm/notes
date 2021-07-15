@@ -58,7 +58,8 @@ const Home = () => {
   return (
     <div className="bg-black text-white">
       <Head>
-        <title>Create Next App</title>
+        <title>Notelist</title>
+        <meta key="description" content="Lightweight note app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
