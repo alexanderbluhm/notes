@@ -1,18 +1,36 @@
-import mysql from "mysql2/promise";
+import prisma from "@/lib/prisma";
 
-// This is a simple database connection test to prove you can connect to a persistent store for your application.
 export default async (req, res) => {
-//   const connection = await mysql.createConnection({
-//     host: process.env.MYSQL_HOST,
-//     port: process.env.MYSQL_PORT,
-//     user: process.env.MYSQL_USER,
-//     password: process.env.MYSQL_PASSWORD,
-//   });
-
-//   const [rows] = await connection.query("SELECT 1 as value");
-//   connection.end();
-
-//   res.json({
-//     value: rows[0]["value"],
-//   });
+  if (req.method === "GET") {
+    try {
+      const posts = await prisma.note.findMany({
+        include: { author: true },
+      });
+      res.status(200).json(posts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json(error);
+    }
+  } else if (req.method === "POST") {
+    const { title, content, authorEmail } = req.body;
+    try {
+      const createdPost = await prisma.note.create({
+        data: {
+          title,
+          content,
+          author: {
+            connect: {
+              email: authorEmail,
+            },
+          },
+        },
+      });
+      res.status(200).json(createdPost);
+    } catch (e) {
+      console.error(e);
+      return res.status(500);
+    }
+  } else {
+    res.status(404);
+  }
 };
