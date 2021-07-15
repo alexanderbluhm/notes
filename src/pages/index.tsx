@@ -1,19 +1,55 @@
 import Head from "next/head";
 import { Navbar } from "@/components/common";
 import useSWR from "swr";
-import { format, parseISO } from "date-fns";
 import { AnimateSharedLayout, motion } from "framer-motion";
 import { useActiveId } from "@/lib/useActive";
 import { Note } from "@/components/common";
+import { useState } from "react";
 
 const Home = () => {
-  const { data, error } = useSWR("/api/notes");
+  const { data, error, mutate } = useSWR("/api/notes");
   const { id: activeId, setActiveId } = useActiveId((state) => state);
+
+  const [noteText, setNoteText] = useState("");
 
   const spring = {
     type: "spring",
     stiffness: 500,
     damping: 40,
+  };
+
+  const handleCreate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key == "Enter") {
+      // we want to submit on enter and don't create a new line
+      e.preventDefault();
+
+      if (noteText.length === 0) return;
+
+      const note = {
+        title: noteText,
+        createdAt: new Date().toISOString(),
+        authorId: 1,
+      };
+
+      // mutate but not revalidate
+      mutate([note, ...data], false);
+
+      await fetch("/api/notes", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(note),
+      }).catch(ex => {
+
+      }).finally(() => {
+        setNoteText("");
+      });
+
+      // revalidate
+      mutate();
+    }
   };
 
   if (error) return <div>failed to load</div>;
@@ -40,23 +76,24 @@ const Home = () => {
               {"note-input" === activeId && (
                 <motion.div
                   layoutId="hover"
-                  initial={{ opacity: 0 }}
+                  initial={false}
                   animate={{
                     backgroundColor: "#18181B",
-                    opacity: 1,
                   }}
-                  exit={{ opacity: 0 }}
                   transition={spring}
                   className="absolute inset-0 mb-2 rounded-md bg-gray-900"
                 ></motion.div>
               )}
 
               <textarea
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
                 onMouseEnter={() => setActiveId("note-input")}
+                onKeyDown={handleCreate}
                 rows={1}
                 spellCheck={false}
                 className="w-full isolate bg-transparent h-auto resize-none overflow-y-hidden p-4 rounded-md focus:outline-none appearance-none placeholder-gray-400"
-                placeholder="Quick Note"
+                placeholder="Add Quick Note"
               ></textarea>
             </div>
           </section>

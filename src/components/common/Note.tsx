@@ -21,7 +21,7 @@ const Item = ({ note }: Props) => {
       key={note.id}
       className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative"
     >
-      <span className="w-8 absolute font-light text-white top-2 right-1 opacity-0 sm:group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500">
+      <span style={{zIndex: 10}} className="w-8 absolute font-light text-white top-3.5 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500">
         {format(parseISO(note.createdAt), "hh:mm")}
       </span>
       <div
@@ -31,29 +31,36 @@ const Item = ({ note }: Props) => {
         {note.id === activeId && (
           <motion.div
             layoutId="hover"
-            initial={{ opacity: 0 }}
             animate={{
               backgroundColor: "#18181B",
-              opacity: 1,
             }}
-            exit={{ opacity: 0 }}
             transition={spring}
             className="absolute inset-0 rounded-md bg-gray-900"
           ></motion.div>
         )}
         <a
           href="#"
-          className="isolate px-4 py-3 block w-full rounded-md bg-transparent"
+          className="isolate flex justify-between items-center px-4 py-3 w-full rounded-md bg-transparent"
         >
           {note.title}
+          <button className="hidden p-1 rounded-full hover:bg-gray-800 transition-colors duration-200">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1"
+                d="M6.75 6.75C6.75 5.64543 7.64543 4.75 8.75 4.75H15.25C16.3546 4.75 17.25 5.64543 17.25 6.75V19.25L12 14.75L6.75 19.25V6.75Z"
+              ></path>
+            </svg>
+          </button>
         </a>
       </div>
     </li>
   );
 };
 
-
-const Note = () => {}
+const Note = () => {};
 
 Note.Item = Item;
 

@@ -15,15 +15,14 @@ export default async (req, res) => {
       res.status(500).json(error);
     }
   } else if (req.method === "POST") {
-    const { title, content, authorEmail } = req.body;
+    const { title, authorId } = req.body;
     try {
       const createdPost = await prisma.note.create({
         data: {
           title,
-          content,
           author: {
             connect: {
-              email: authorEmail,
+              id: authorId,
             },
           },
         },
