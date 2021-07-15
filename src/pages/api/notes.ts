@@ -5,6 +5,9 @@ export default async (req, res) => {
     try {
       const posts = await prisma.note.findMany({
         include: { author: true },
+        orderBy: {
+            createdAt: 'desc'
+        }
       });
       res.status(200).json(posts);
     } catch (error) {

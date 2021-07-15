@@ -1,2 +1,2 @@
 export * from "./Navbar";
-export * from "./NoteListItem";
+export { default as Note } from "./Note";

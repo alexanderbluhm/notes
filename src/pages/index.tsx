@@ -3,11 +3,12 @@ import { Navbar } from "@/components/common";
 import useSWR from "swr";
 import { format, parseISO } from "date-fns";
 import { AnimateSharedLayout, motion } from "framer-motion";
-import { useState } from "react";
+import { useActiveId } from "@/lib/useActive";
+import { Note } from "@/components/common";
 
 const Home = () => {
   const { data, error } = useSWR("/api/notes");
-  const [hovered, setHovered] = useState(-1);
+  const { id: activeId, setActiveId } = useActiveId((state) => state);
 
   const spring = {
     type: "spring",
@@ -27,7 +28,7 @@ const Home = () => {
 
       <Navbar />
 
-      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-28 space-y-8">
+      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-28 space-y-8">
         <AnimateSharedLayout>
           {/* {JSON.stringify(data)} */}
           <section aria-labelledby="add-new">
@@ -35,24 +36,26 @@ const Home = () => {
               Add new note
             </h2>
 
-            <div
-              className="relative w-full"
-              onMouseEnter={() => setHovered(99)}
-            >
-              {99 === hovered && (
+            <div className="relative w-full">
+              {"note-input" === activeId && (
                 <motion.div
                   layoutId="hover"
-                  initial={false}
-                  animate={{ backgroundColor: "#18181B" }}
+                  initial={{ opacity: 0 }}
+                  animate={{
+                    backgroundColor: "#18181B",
+                    opacity: 1,
+                  }}
+                  exit={{ opacity: 0 }}
                   transition={spring}
                   className="absolute inset-0 mb-2 rounded-md bg-gray-900"
                 ></motion.div>
               )}
 
               <textarea
+                onMouseEnter={() => setActiveId("note-input")}
                 rows={1}
                 spellCheck={false}
-                className="w-full  isolate bg-transparent h-auto resize-none overflow-y-hidden p-4 rounded-md focus:outline-none appearance-none placeholder-gray-400"
+                className="w-full isolate bg-transparent h-auto resize-none overflow-y-hidden p-4 rounded-md focus:outline-none appearance-none placeholder-gray-400"
                 placeholder="Quick Note"
               ></textarea>
             </div>
@@ -63,85 +66,39 @@ const Home = () => {
               aria-labelledby="bookmarked"
               className="pb-8 px-4 space-y-4"
             >
-              <h2 id="bookmarked" className="text-2xl font-bold">
-                Bookmarked
-              </h2>
+              <div className="flex items-end justify-between">
+                <h2
+                  style={{ zIndex: 10 }}
+                  id="bookmarked"
+                  className="text-2xl font-bold isolate block"
+                >
+                  Bookmarked
+                </h2>
+              </div>
               <ul className="space-y-3">
                 {data &&
                   data
                     .filter((note) => note.bookmarked)
-                    .map((note) => (
-                      <li
-                        key={note.id}
-                        className="text-gray-200 group -ml-16 flex items-baseline relative"
-                      >
-                        <span className="w-8 absolute font-light text-white top-2 right-1 opacity-0 sm:group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-300">
-                          {format(parseISO(note.createdAt), "hh:mm")}
-                        </span>
-                        <div
-                          className="relative w-full"
-                          onMouseEnter={() => setHovered(note.id)}
-                        >
-                          {note.id === hovered && (
-                            <motion.div
-                              layoutId="hover"
-                              initial={false}
-                              animate={{ backgroundColor: "#18181B" }}
-                              transition={spring}
-                              className="absolute inset-0 rounded-md bg-gray-900"
-                            ></motion.div>
-                          )}
-                          <a
-                            href="#"
-                            className="isolate px-4 py-3 block w-full rounded-md bg-transparent"
-                          >
-                            {note.title}
-                          </a>
-                        </div>
-                      </li>
-                    ))}
+                    .map((note) => <Note.Item note={note} />)}
               </ul>
             </section>
 
             <section aria-labelledby="latest" className="pt-8 px-4 space-y-4">
-              <h2 id="latest" className="text-2xl font-bold">
-                Latest
-              </h2>
+              <div className="flex items-end justify-between">
+                <h2
+                  style={{ zIndex: 10 }}
+                  id="latest"
+                  className="text-2xl font-bold isolate"
+                >
+                  Latest
+                </h2>
+              </div>
 
               <ul className="space-y-3">
                 {data &&
                   data
                     .filter((note) => !note.bookmarked)
-                    .map((note) => (
-                      <li
-                        key={note.id}
-                        className="text-gray-200 group -ml-16 flex items-baseline relative"
-                      >
-                        <span className="w-8 absolute font-light text-white top-2 right-1 opacity-0 sm:group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-300">
-                          {format(parseISO(note.createdAt), "hh:mm")}
-                        </span>
-                        <div
-                          className="relative w-full"
-                          onMouseEnter={() => setHovered(note.id)}
-                        >
-                          {note.id === hovered && (
-                            <motion.div
-                              layoutId="hover"
-                              initial={false}
-                              animate={{ backgroundColor: "#18181B" }}
-                              transition={spring}
-                              className="absolute inset-0 rounded-md bg-gray-900"
-                            ></motion.div>
-                          )}
-                          <a
-                            href="#"
-                            className="isolate px-4 py-3 block w-full rounded-md bg-transparent"
-                          >
-                            {note.title}
-                          </a>
-                        </div>
-                      </li>
-                    ))}
+                    .map((note) => <Note.Item note={note} />)}
               </ul>
             </section>
           </div>
