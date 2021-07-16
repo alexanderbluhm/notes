@@ -11,7 +11,7 @@ module.exports = {
         sans: ["Inter", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        gray: colors.gray
+        gray: colors.gray,
       },
     },
   },
