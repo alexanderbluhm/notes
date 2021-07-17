@@ -11,17 +11,18 @@ const spring = {
 
 interface Props {
   note: any;
+  bookmark: (id: string) => void;
 }
 
-const Item = ({ note }: Props) => {
+const Item = ({ note, bookmark }: Props) => {
   const { id: activeId, setActiveId } = useActiveId((state) => state);
 
   return (
-    <li
-      key={note.id}
-      className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative"
-    >
-      <span style={{zIndex: 10}} className="w-8 absolute font-light text-white top-3.5 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500">
+    <li className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative">
+      <span
+        style={{ zIndex: 10 }}
+        className="w-8 absolute font-light text-white top-3.5 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500"
+      >
         {format(parseISO(note.createdAt), "hh:mm")}
       </span>
       <div
@@ -38,13 +39,17 @@ const Item = ({ note }: Props) => {
             className="absolute inset-0 rounded-md bg-gray-900"
           ></motion.div>
         )}
-        <a
-          href="#"
-          className="isolate flex justify-between items-center px-4 py-3 w-full rounded-md bg-transparent"
-        >
+        <span className="isolate flex justify-between items-center px-4 py-3 w-full rounded-md bg-transparent">
           {note.title}
-          <button className="hidden p-1 rounded-full hover:bg-gray-800 transition-colors duration-200">
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <button
+            onClick={() => bookmark(note.id)}
+            className="inline-flex p-1 rounded-full hover:bg-gray-800 transition-colors duration-200"
+          >
+            <svg
+              className="w-6 h-6"
+              fill={note.bookmarked ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke="currentColor"
                 strokeLinecap="round"
@@ -54,7 +59,7 @@ const Item = ({ note }: Props) => {
               ></path>
             </svg>
           </button>
-        </a>
+        </span>
       </div>
     </li>
   );

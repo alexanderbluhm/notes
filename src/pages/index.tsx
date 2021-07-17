@@ -45,6 +45,34 @@ const Home = () => {
     }
   };
 
+  const handleBookmark = async (id: String) => {
+    console.log(id);
+
+    let index = data.findIndex((note) => note.id === id);
+    if (index == -1) return;
+    let note = data[index];
+    note.bookmarked = !note.bookmarked;
+    // note.updatedAt = new Date().toISOString();
+    let copy = data;
+    copy.splice(index, 1);
+    const sorted = [...copy, note].sort((note) => note.createdAt);
+    mutate(sorted, false);
+
+    await fetch("/api/notes", {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(note),
+    }).catch((ex) => {
+      console.error(ex);
+    });
+
+    // revalidate
+    mutate();
+  };
+
   return (
     <div className="bg-black text-white">
       <Head>
@@ -93,7 +121,9 @@ const Home = () => {
                   {data &&
                     data
                       .filter((note) => note.bookmarked)
-                      .map((note) => <Note.Item note={note} />)}
+                      .map((note) => (
+                        <Note.Item key={note.id} bookmark={handleBookmark} note={note} />
+                      ))}
                 </ul>
               </section>
 
@@ -112,7 +142,9 @@ const Home = () => {
                   {data &&
                     data
                       .filter((note) => !note.bookmarked)
-                      .map((note) => <Note.Item note={note} />)}
+                      .map((note) => (
+                        <Note.Item key={note.id} bookmark={handleBookmark} note={note} />
+                      ))}
                 </ul>
               </section>
             </div>
