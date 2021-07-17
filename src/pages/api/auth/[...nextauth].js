@@ -22,6 +22,6 @@ export default NextAuth({
     },
   },
   session: {
-    jwt: true,
+    // jwt: true,
   },
 });
