@@ -50,12 +50,19 @@ const Item = ({ note, bookmark }: Props) => {
             </span>
             <svg
               aria-hidden="true"
-              className="w-6 h-6 text-brand"
-              fill={note.bookmarked ? "currentColor" : "none"}
+              className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
+              fill={note.bookmarked ? "url(#grad1)" : "none"}
+              stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
               viewBox="0 0 24 24"
             >
+              <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="var(--tw-gradient-from)" />
+                  <stop offset="100%" stopColor="var(--tw-gradient-to)" />
+                </linearGradient>
+              </defs>
               <path
-                stroke="currentColor"
+                
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="1"
