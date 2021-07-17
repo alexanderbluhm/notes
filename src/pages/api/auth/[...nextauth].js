@@ -13,11 +13,15 @@ export default NextAuth({
   adapter: PrismaAdapter(prisma),
   pages: {
     signIn: "/auth/email-signin",
+    verifyRequest: '/auth/verify-request',
   },
   callbacks: {
     session: async (session, user) => {
       session.id = user.id;
       return Promise.resolve(session);
     },
+  },
+  session: {
+    jwt: true,
   },
 });

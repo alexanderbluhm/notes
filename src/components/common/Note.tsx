@@ -46,7 +46,7 @@ const Item = ({ note, bookmark }: Props) => {
             className="inline-flex p-1 rounded-full hover:bg-gray-800 transition-colors duration-200"
           >
             <svg
-              className="w-6 h-6"
+              className="w-6 h-6 text-brand"
               fill={note.bookmarked ? "currentColor" : "none"}
               viewBox="0 0 24 24"
             >

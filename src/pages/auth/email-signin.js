@@ -18,7 +18,7 @@ export default function SignIn({ csrfToken }) {
               Email address
             </label>
             <input
-              className="appearance-none rounded-none bg-gray-900 relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              className="appearance-none rounded-none bg-gray-900 relative block w-full px-3 py-2 border border-gray-600 placeholder-gray-500 text-white rounded-t-md focus:outline-none focus:ring-brand focus:border-brand focus:z-10 sm:text-sm"
               required
               type="email"
               id="email"
@@ -28,7 +28,7 @@ export default function SignIn({ csrfToken }) {
           </div>
 
           <button
-            className="rounded-none sm:text-sm rounded-b-md border bg-black hover:bg-gray-900 transition-colors border-gray-600 hover px-3 py-2 w-full focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10"
+            className="rounded-none sm:text-sm rounded-b-md border bg-black hover:bg-gray-900 transition-colors border-gray-600 hover px-3 py-2 w-full focus:outline-none focus:ring-brand focus:border-brand focus:z-10"
             type="submit"
           >
             Sign in with Email
