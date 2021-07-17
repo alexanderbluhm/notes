@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.3.0",
     "@next-auth/prisma-adapter": "^0.5.3",
     "@prisma/client": "^2.27.0",
     "date-fns": "^2.22.1",

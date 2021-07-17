@@ -39,13 +39,17 @@ const Item = ({ note, bookmark }: Props) => {
             className="absolute inset-0 rounded-md bg-gray-900"
           ></motion.div>
         )}
-        <span className="isolate flex justify-between items-center px-4 py-3 w-full rounded-md bg-transparent">
+        <span className="isolate flex justify-between items-center px-3 py-2 w-full rounded-md bg-transparent">
           {note.title}
           <button
             onClick={() => bookmark(note.id)}
-            className="inline-flex p-1 rounded-full hover:bg-gray-800 transition-colors duration-200"
+            className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
           >
+            <span className="sr-only">
+              {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
+            </span>
             <svg
+              aria-hidden="true"
               className="w-6 h-6 text-brand"
               fill={note.bookmarked ? "currentColor" : "none"}
               viewBox="0 0 24 24"
