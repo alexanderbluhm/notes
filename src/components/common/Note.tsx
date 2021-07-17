@@ -21,7 +21,7 @@ const Item = ({ note, bookmark }: Props) => {
     <li className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative">
       <span
         style={{ zIndex: 10 }}
-        className="w-8 absolute font-light text-white top-3.5 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500"
+        className="w-8 absolute font-light text-white top-4 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500"
       >
         {format(parseISO(note.createdAt), "hh:mm")}
       </span>
@@ -43,7 +43,7 @@ const Item = ({ note, bookmark }: Props) => {
           {note.title}
           <button
             onClick={() => bookmark(note.id)}
-            className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+            className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
           >
             <span className="sr-only">
               {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
