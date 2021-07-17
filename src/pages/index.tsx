@@ -55,7 +55,9 @@ const Home = () => {
     // note.updatedAt = new Date().toISOString();
     let copy = data;
     copy.splice(index, 1);
-    const sorted = [...copy, note].sort((note) => note.createdAt);
+    const sorted = [...copy, note].sort((note1, note2) =>
+      note1.createdAt >= note2.createdAt ? -1 : 1
+    );
     mutate(sorted, false);
 
     await fetch("/api/notes", {
@@ -122,7 +124,11 @@ const Home = () => {
                     data
                       .filter((note) => note.bookmarked)
                       .map((note) => (
-                        <Note.Item key={note.id} bookmark={handleBookmark} note={note} />
+                        <Note.Item
+                          key={note.id}
+                          bookmark={handleBookmark}
+                          note={note}
+                        />
                       ))}
                 </ul>
               </section>
@@ -143,7 +149,11 @@ const Home = () => {
                     data
                       .filter((note) => !note.bookmarked)
                       .map((note) => (
-                        <Note.Item key={note.id} bookmark={handleBookmark} note={note} />
+                        <Note.Item
+                          key={note.id}
+                          bookmark={handleBookmark}
+                          note={note}
+                        />
                       ))}
                 </ul>
               </section>
