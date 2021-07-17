@@ -1,6 +1,6 @@
 import { useActiveId } from "@/lib/useActive";
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const spring = {
   type: "spring",
@@ -14,15 +14,13 @@ interface Props {
   handleKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
-const LINE_HEIGHT = 24;
+const NAME = "note-input"
 
 export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
   const { id: activeId, setActiveId } = useActiveId((state) => state);
-  const [lineCount, setLineCount] = useState(2);
+  const ref = useRef<HTMLTextAreaElement>();
 
   const handleChange = (value: string) => {
-    const lines = value.split("\n").length;
-    if (lines !== lineCount) setLineCount(lines);
     setValue(value)
   };
 
@@ -30,9 +28,23 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
     handleKeyDown(e);
   };
 
+  const handleDocumentKey = (e: KeyboardEvent) => {
+    if (e.key === "k" && e.metaKey) {
+      setActiveId(NAME);
+      ref.current.focus();
+    }
+  }
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleDocumentKey)
+    return () => {
+      document.removeEventListener('keydown', handleDocumentKey)
+    }
+  }, [])
+
   return (
     <div className="relative w-full">
-      {"note-input" === activeId && (
+      {NAME === activeId && (
         <motion.div
           layoutId="hover"
           initial={false}
@@ -40,28 +52,27 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
             backgroundColor: "#18181B",
           }}
           transition={spring}
-          className="absolute inset-0 mb-2 rounded-md bg-gray-900"
-        ></motion.div>
+          className="absolute inset-0 rounded-md bg-gray-900"
+        />
       )}
 
-      <div className="relative">
+      <div className="relative flex items-center justify-center">
         <textarea
+          ref={ref}
           value={value}
           onChange={(e) => handleChange(e.target.value)}
-          onMouseEnter={() => setActiveId("note-input")}
+          onMouseEnter={() => setActiveId(NAME)}
           onKeyDown={handleKey}
           rows={1}
-        //   style={{ height: lineCount * LINE_HEIGHT + 8 }}
           spellCheck={false}
           className="w-full isolate bg-transparent resize-none overflow-y-hidden py-4 pl-4 pr-16 rounded-md focus:outline-none placeholder-gray-400"
           placeholder="Add Quick Note"
         ></textarea>
-        <div className="hidden absolute inset-y-0 right-0 flex py-1.5 pr-1.5">
-          <kbd className="inline-flex items-center border border-gray-200 rounded px-2 text-sm font-sans font-medium text-gray-400">
+        <div className={`hidden sm:flex transition-opacity absolute inset-y-0 right-0 items-center justify-center pr-3 ${activeId === NAME ? "opacity-100" : "opacity-0"}`}>
+          <kbd className="inline-flex h-8 items-center border border-gray-700 rounded px-2 text-sm font-sans font-medium text-gray-400">
             ⌘K
           </kbd>
         </div>
-
       </div>
     </div>
   );
