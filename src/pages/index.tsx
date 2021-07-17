@@ -85,7 +85,7 @@ const Home = () => {
 
       <Navbar />
 
-      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-28 space-y-8">
+      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 space-y-8">
         {!data && !error && <div>Loading ...</div>}
         {error && error.status === 401 && (
           <Alert onClick={signIn} text="Please login to create notes" />
