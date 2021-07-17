@@ -25,6 +25,8 @@ const App = ({ Component, pageProps }) => {
         <SWRConfig
           value={{
             fetcher: fetcher,
+            revalidateOnFocus: false,
+            refreshInterval: 0
           }}
         >
           <Component {...pageProps} />
