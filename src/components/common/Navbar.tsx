@@ -28,8 +28,8 @@ export const Navbar = (props: Props) => {
                 y2="39.5"
                 gradientUnits="userSpaceOnUse"
               >
-                <stop stop-color="#818CF8" />
-                <stop offset="1" stop-color="#A855F7" />
+                <stop stopColor="#818CF8" />
+                <stop offset="1" stopColor="#A855F7" />
               </linearGradient>
             </defs>
           </svg>
