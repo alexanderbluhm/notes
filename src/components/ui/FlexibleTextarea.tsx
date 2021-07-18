@@ -65,7 +65,7 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
           onKeyDown={handleKey}
           rows={1}
           spellCheck={false}
-          className="w-full isolate bg-transparent resize-none overflow-y-hidden py-4 pl-4 pr-16 rounded-md focus:outline-none placeholder-gray-400"
+          className="w-full isolate bg-transparent resize-none overflow-y-hidden py-4 pl-4 pr-16 rounded-md focus:outline-none placeholder-gray-500"
           placeholder="Add Quick Note"
         ></textarea>
         <div className={`hidden sm:flex transition-opacity absolute inset-y-0 right-0 items-center justify-center pr-3 ${activeId === NAME ? "opacity-100" : "opacity-0"}`}>

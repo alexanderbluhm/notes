@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/common";
+import { DeleteDialog, Navbar } from "@/components/common";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -8,6 +8,7 @@ import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
 import { formatRelative, parseISO } from "date-fns";
 import { BookmarkIcon, TrashIcon } from "@/components/icons";
+import { Menu } from "@headlessui/react";
 
 interface Props {}
 
@@ -32,6 +33,16 @@ const Index = (props: Props) => {
     const updated = { ...note, bookmarked: !note.bookmarked };
     mutate(updated, false);
     await updateNote(updated);
+  };
+
+  const handleDelete = async () => {
+    await fetch(`/api/notes/${note.id}`, {
+      method: "DELETE",
+    }).catch((ex) => {
+      console.error(ex);
+    });
+
+    router.replace('/');
   };
 
   const handleUpdate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -78,10 +89,10 @@ const Index = (props: Props) => {
                 </span>
                 <h1 className="text-lg font-medium">{note.title}</h1>
               </div>
-              <div className="space-x-2 items-center">
+              <div className="flex space-x-2 items-center">
                 <button
                   onClick={toggleBookmark}
-                  className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                  className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
                 >
                   <span className="sr-only">
                     {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
@@ -93,17 +104,19 @@ const Index = (props: Props) => {
                     stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
                   />
                 </button>
-                <button
-                  // onClick={() => bookmark(note.id)}
-                  className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
-                >
-                  <span className="sr-only">Delete note</span>
-                  <TrashIcon
-                    aria-hidden="true"
-                    className="w-6 h-6 text-brand from-rose-400 to-red-500"
-                    fill="url(#grad2)"
-                  />
-                </button>
+                <DeleteDialog onDelete={handleDelete}>
+                  <Menu.Button
+                    // onClick={() => bookmark(note.id)}
+                    className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                  >
+                    <span className="sr-only">Delete note</span>
+                    <TrashIcon
+                      aria-hidden="true"
+                      className="w-6 h-6 text-brand from-rose-400 to-red-500"
+                      fill="url(#grad2)"
+                    />
+                  </Menu.Button>
+                </DeleteDialog>
               </div>
             </div>
 
@@ -122,10 +135,10 @@ const Index = (props: Props) => {
                 <textarea
                   onKeyDown={handleUpdate}
                   rows={5}
-                  placeholder="Markdown Content"
+                  placeholder="Markdown Content ..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="bg-gray-900 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
+                  className="bg-gray-900 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
                 >
                   {note?.content}
                 </textarea>

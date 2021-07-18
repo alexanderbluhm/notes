@@ -25,7 +25,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
   } else if (req.method === "PUT") {
     const { content, bookmarked } = req.body;
-    console.log("bookmarked", bookmarked);
     const { id: noteId } = req.query;
 
     try {
@@ -35,10 +34,23 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         data: {
           content: content,
-          bookmarked: bookmarked
+          bookmarked: bookmarked,
         },
       });
       res.status(200).json(updatedNote);
+    } catch (e) {
+      console.error(e);
+      return res.status(500);
+    }
+  } else if (req.method === "DELETE") {
+    const { id: noteId } = req.query;
+    try {
+      await prisma.note.delete({
+        where: {
+          id: parseInt(noteId.toString()),
+        },
+      });
+      res.status(200).json({});
     } catch (e) {
       console.error(e);
       return res.status(500);
