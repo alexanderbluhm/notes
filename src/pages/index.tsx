@@ -46,8 +46,6 @@ const Home = () => {
   };
 
   const handleBookmark = async (id: String) => {
-    console.log(id);
-
     let index = data.findIndex((note) => note.id === id);
     if (index == -1) return;
     let note = data[index];
@@ -125,6 +123,7 @@ const Home = () => {
                       .filter((note) => note.bookmarked)
                       .map((note) => (
                         <Note.Item
+                          as="li"
                           key={note.id}
                           bookmark={handleBookmark}
                           note={note}
@@ -150,6 +149,7 @@ const Home = () => {
                       .filter((note) => !note.bookmarked)
                       .map((note) => (
                         <Note.Item
+                          as="li"
                           key={note.id}
                           bookmark={handleBookmark}
                           note={note}

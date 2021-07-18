@@ -2,6 +2,7 @@ import React from "react";
 import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
 import { useActiveId } from "@/lib/useActive";
+import Link from 'next/link';
 
 const spring = {
   type: "spring",
@@ -12,13 +13,15 @@ const spring = {
 interface Props {
   note: any;
   bookmark: (id: string) => void;
+  as?: string;
 }
 
-const Item = ({ note, bookmark }: Props) => {
+const Item = ({ note, bookmark, as = "div" }: Props) => {
   const { id: activeId, setActiveId } = useActiveId((state) => state);
+  let Component: any = as;
 
   return (
-    <li className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative">
+    <Component className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative">
       <span
         style={{ zIndex: 10 }}
         className="w-8 absolute font-light text-white top-4 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500"
@@ -40,7 +43,9 @@ const Item = ({ note, bookmark }: Props) => {
           ></motion.div>
         )}
         <span className="isolate flex justify-between items-center px-3 py-2 w-full rounded-md bg-transparent">
-          {note.title}
+          <Link href={`/notes/${note.id}`}>
+            <a className="block w-full mr-12" href="">{note.title}</a>
+          </Link>
           <button
             onClick={() => bookmark(note.id)}
             className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
@@ -62,7 +67,6 @@ const Item = ({ note, bookmark }: Props) => {
                 </linearGradient>
               </defs>
               <path
-                
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 strokeWidth="1"
@@ -72,7 +76,7 @@ const Item = ({ note, bookmark }: Props) => {
           </button>
         </span>
       </div>
-    </li>
+    </Component>
   );
 };
 

@@ -34,7 +34,7 @@ export const Navbar = (props: Props) => {
             </defs>
           </svg>
 
-          <span className="font-medium">Notelist</span>
+          <a href="/" className="font-medium">Notelist</a>
         </div>
         {!session && (
           <>

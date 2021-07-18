@@ -14,7 +14,8 @@ module.exports = {
         gray: colors.gray,
         brand: {
           DEFAULT: colors.indigo[500]
-        }
+        },
+        rose: colors.rose
       },
     },
   },
