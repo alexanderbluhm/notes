@@ -42,7 +42,7 @@ const Index = (props: Props) => {
       console.error(ex);
     });
 
-    router.replace('/');
+    router.replace("/");
   };
 
   const handleUpdate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -78,10 +78,10 @@ const Index = (props: Props) => {
   return (
     <div>
       <Navbar />
-      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 space-y-8">
+      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 divide-y divide-gray-800">
         {note && (
           <>
-            <div className="flex items-start justify-between">
+            <div className="flex items-center justify-between pb-2">
               <div className="">
                 {/* <Note.Item note={data} bookmark={() => {}} /> */}
                 <span className="text-sm text-gray-400">
@@ -105,9 +105,7 @@ const Index = (props: Props) => {
                   />
                 </button>
                 <DeleteDialog onDelete={handleDelete}>
-                  <Menu.Button
-                    className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
-                  >
+                  <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
                     <span className="sr-only">Delete note</span>
                     <TrashIcon
                       aria-hidden="true"
@@ -119,43 +117,45 @@ const Index = (props: Props) => {
               </div>
             </div>
 
-            <div className="relative">
-              {previewActive && !note.content && !content && (
-                <div className="rounded-md p-3 text-brand border border-brand">
-                  Click on <b>edit</b> to add more content to the note!
-                </div>
-              )}
+            <div className="pt-2">
+              <div className="relative">
+                {previewActive && !note.content && !content && (
+                  <div className="rounded-md p-3 text-brand border border-brand">
+                    Click on <b>edit</b> to add more content to the note!
+                  </div>
+                )}
 
-              {previewActive && (
-                <div className="py-2">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkMath]}
-                    rehypePlugins={[rehypeKatex]}
-                    children={content}
-                  />
-                </div>
-              )}
+                {previewActive && (
+                  <div className="py-2 prose prose-sm">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkMath]}
+                      rehypePlugins={[rehypeKatex]}
+                      children={content}
+                    />
+                  </div>
+                )}
 
-              {!previewActive && (
-                <textarea
-                  onKeyDown={handleUpdate}
-                  rows={5}
-                  placeholder="Content ..."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="bg-gray-900 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
+                {!previewActive && (
+                  <textarea
+                    onKeyDown={handleUpdate}
+                    rows={5}
+                    placeholder="Content ..."
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    className="bg-gray-900 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
+                  >
+                    {note?.content}
+                  </textarea>
+                )}
+
+                <button
+                  onClick={() => setPreviewActive((prev) => !prev)}
+                  style={{ zIndex: 10 }}
+                  className="absolute hover:bg-gray-800 border border-gray-700 transition-colors isolate top-2 right-2 px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
                 >
-                  {note?.content}
-                </textarea>
-              )}
-
-              <button
-                onClick={() => setPreviewActive((prev) => !prev)}
-                style={{ zIndex: 10 }}
-                className="absolute hover:bg-gray-800 border border-gray-700 transition-colors isolate top-2 right-2 px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
-              >
-                {previewActive ? "Edit" : "Preview"}
-              </button>
+                  {previewActive ? "Edit" : "Preview"}
+                </button>
+              </div>
             </div>
           </>
         )}
