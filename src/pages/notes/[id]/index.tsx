@@ -83,13 +83,13 @@ const Index = (props: Props) => {
     <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 divide-y divide-gray-800">
       {note && (
         <>
-          <div className="flex items-center justify-between pb-2">
+          <div className="flex items-center justify-between pb-6">
             <div className="">
               {/* <Note.Item note={data} bookmark={() => {}} /> */}
+              <h1 className="text-xl font-medium">{note.title}</h1>
               <span className="text-sm text-gray-400">
                 {formatRelative(parseISO(note.createdAt), new Date())}
               </span>
-              <h1 className="text-lg font-medium">{note.title}</h1>
             </div>
             <div className="flex space-x-2 items-center">
               <button
@@ -119,7 +119,7 @@ const Index = (props: Props) => {
             </div>
           </div>
 
-          <div className="pt-2">
+          <div className="pt-6">
             <div className="relative">
               {previewActive && !note.content && !content && (
                 <div className="py-3 text-gray-400 pr-20">
