@@ -20,7 +20,6 @@ module.exports = {
         },
         rose: colors.rose,
       },
-
       typography: {
         DEFAULT: {
           css: {

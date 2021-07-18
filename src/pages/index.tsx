@@ -1,16 +1,17 @@
 import Head from "next/head";
-import { Alert, Navbar } from "@/components/common";
+import { Alert } from "@/components/common";
 import useSWR from "swr";
 import { AnimateSharedLayout, motion } from "framer-motion";
-import { useActiveId } from "@/lib/useActive";
 import { Note } from "@/components/common";
 import { useState } from "react";
 import { FlexibleTextarea } from "@/components/ui";
 import { signIn } from "next-auth/client";
+import { useNotification } from "@/lib/useNotification";
 
 const Home = () => {
   const { data, error, mutate } = useSWR("/api/notes");
   const [noteText, setNoteText] = useState("");
+  const { addNotification } = useNotification();
 
   const handleCreate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key == "Enter" && !e.shiftKey) {
@@ -40,6 +41,7 @@ const Home = () => {
         console.error(ex);
       });
 
+      addNotification({ text: "Created Note", type: "info" });
       // revalidate
       mutate();
     }
@@ -66,9 +68,11 @@ const Home = () => {
       },
       body: JSON.stringify(note),
     }).catch((ex) => {
+      addNotification({ text: "Error", type: "error" });
       console.error(ex);
     });
 
+    addNotification({ text: "Changed Bookmark", type: "info" });
     // revalidate
     mutate();
   };
@@ -80,8 +84,6 @@ const Home = () => {
         <meta key="description" content="Lightweight note app" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <Navbar />
 
       <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 space-y-8">
         {/* {!data && !error && <div>Loading ...</div>} */}

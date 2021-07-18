@@ -1,6 +1,7 @@
 import { SWRConfig } from "swr";
 import "../styles/main.css";
 import { Provider } from "next-auth/client";
+import { Notifications, Navbar } from "@/components/common";
 
 const fetcher = async (...args) => {
   const res = await fetch(...args);
@@ -26,9 +27,12 @@ const App = ({ Component, pageProps }) => {
           value={{
             fetcher: fetcher,
             revalidateOnFocus: false,
-            refreshInterval: 0
+            refreshInterval: 0,
           }}
         >
+          <Notifications />
+          <Navbar />
+
           <Component {...pageProps} />
         </SWRConfig>
       </Provider>

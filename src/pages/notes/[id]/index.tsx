@@ -9,6 +9,7 @@ import "katex/dist/katex.min.css";
 import { formatRelative, parseISO } from "date-fns";
 import { BookmarkIcon, TrashIcon } from "@/components/icons";
 import { Menu } from "@headlessui/react";
+import { useNotification } from "@/lib/useNotification";
 
 interface Props {}
 
@@ -23,6 +24,8 @@ const Index = (props: Props) => {
     error,
     mutate,
   } = useSWR(id ? `/api/notes/${id}` : undefined);
+
+  const { addNotification } = useNotification();
 
   // set content when note is loaded
   useEffect(() => {
@@ -42,6 +45,7 @@ const Index = (props: Props) => {
       console.error(ex);
     });
 
+    addNotification({ text: "Deleted Note", type: "info" });
     router.replace("/");
   };
 
@@ -76,91 +80,88 @@ const Index = (props: Props) => {
   };
 
   return (
-    <div>
-      <Navbar />
-      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 divide-y divide-gray-800">
-        {note && (
-          <>
-            <div className="flex items-center justify-between pb-2">
-              <div className="">
-                {/* <Note.Item note={data} bookmark={() => {}} /> */}
-                <span className="text-sm text-gray-400">
-                  {formatRelative(parseISO(note.createdAt), new Date())}
+    <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 divide-y divide-gray-800">
+      {note && (
+        <>
+          <div className="flex items-center justify-between pb-2">
+            <div className="">
+              {/* <Note.Item note={data} bookmark={() => {}} /> */}
+              <span className="text-sm text-gray-400">
+                {formatRelative(parseISO(note.createdAt), new Date())}
+              </span>
+              <h1 className="text-lg font-medium">{note.title}</h1>
+            </div>
+            <div className="flex space-x-2 items-center">
+              <button
+                onClick={toggleBookmark}
+                className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+              >
+                <span className="sr-only">
+                  {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
                 </span>
-                <h1 className="text-lg font-medium">{note.title}</h1>
-              </div>
-              <div className="flex space-x-2 items-center">
-                <button
-                  onClick={toggleBookmark}
-                  className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
-                >
-                  <span className="sr-only">
-                    {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
-                  </span>
-                  <BookmarkIcon
+                <BookmarkIcon
+                  aria-hidden="true"
+                  className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
+                  fill={note.bookmarked ? "url(#grad1)" : "none"}
+                  stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
+                />
+              </button>
+              <DeleteDialog onDelete={handleDelete}>
+                <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                  <span className="sr-only">Delete note</span>
+                  <TrashIcon
                     aria-hidden="true"
-                    className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
-                    fill={note.bookmarked ? "url(#grad1)" : "none"}
-                    stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
+                    className="w-6 h-6 text-brand from-rose-400 to-red-500"
+                    fill="url(#grad2)"
                   />
-                </button>
-                <DeleteDialog onDelete={handleDelete}>
-                  <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                    <span className="sr-only">Delete note</span>
-                    <TrashIcon
-                      aria-hidden="true"
-                      className="w-6 h-6 text-brand from-rose-400 to-red-500"
-                      fill="url(#grad2)"
-                    />
-                  </Menu.Button>
-                </DeleteDialog>
-              </div>
+                </Menu.Button>
+              </DeleteDialog>
             </div>
+          </div>
 
-            <div className="pt-2">
-              <div className="relative">
-                {previewActive && !note.content && !content && (
-                  <div className="rounded-md p-3 text-brand border border-brand">
-                    Click on <b>edit</b> to add more content to the note!
-                  </div>
-                )}
+          <div className="pt-2">
+            <div className="relative">
+              {previewActive && !note.content && !content && (
+                <div className="py-3 text-gray-400 pr-20">
+                  Click on <b>edit</b> to add more content to the note!
+                </div>
+              )}
 
-                {previewActive && (
-                  <div className="py-2 prose">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkMath]}
-                      rehypePlugins={[rehypeKatex]}
-                      children={content}
-                    />
-                  </div>
-                )}
+              {previewActive && (
+                <div className="py-2 prose">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkMath]}
+                    rehypePlugins={[rehypeKatex]}
+                    children={content}
+                  />
+                </div>
+              )}
 
-                {!previewActive && (
-                  <textarea
-                    onKeyDown={handleUpdate}
-                    rows={5}
-                    placeholder="Content ..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                    className="bg-gray-900 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
-                  >
-                    {note?.content}
-                  </textarea>
-                )}
-
-                <button
-                  onClick={() => setPreviewActive((prev) => !prev)}
-                  style={{ zIndex: 10 }}
-                  className="absolute hover:bg-gray-800 border border-gray-700 transition-colors isolate top-2 right-2 px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
+              {!previewActive && (
+                <textarea
+                  onKeyDown={handleUpdate}
+                  rows={5}
+                  placeholder="Content ..."
+                  value={content}
+                  onChange={(e) => setContent(e.target.value)}
+                  className="bg-gray-900 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
                 >
-                  {previewActive ? "Edit" : "Preview"}
-                </button>
-              </div>
+                  {note?.content}
+                </textarea>
+              )}
+
+              <button
+                onClick={() => setPreviewActive((prev) => !prev)}
+                style={{ zIndex: 10 }}
+                className="absolute hover:bg-gray-800 border border-gray-700 transition-colors isolate top-2 right-2 px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
+              >
+                {previewActive ? "Edit" : "Preview"}
+              </button>
             </div>
-          </>
-        )}
-      </main>
-    </div>
+          </div>
+        </>
+      )}
+    </main>
   );
 };
 
