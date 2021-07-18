@@ -28,6 +28,12 @@ const Index = (props: Props) => {
     if (note && note.content) setContent(note.content);
   }, [note]);
 
+  const toggleBookmark = async () => {
+    const updated = { ...note, bookmarked: !note.bookmarked };
+    mutate(updated, false);
+    await updateNote(updated);
+  };
+
   const handleUpdate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key == "Enter" && !e.shiftKey) {
       // we want to submit on enter and don't create a new line
@@ -41,17 +47,21 @@ const Index = (props: Props) => {
       let updatedNote = { ...note };
       updatedNote.content = content;
 
-      await fetch(`/api/notes/${note.id}`, {
-        method: "PUT",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedNote),
-      }).catch((ex) => {
-        console.error(ex);
-      });
+      await updateNote(updatedNote);
     }
+  };
+
+  const updateNote = async (note) => {
+    await fetch(`/api/notes/${note.id}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(note),
+    }).catch((ex) => {
+      console.error(ex);
+    });
   };
 
   return (
@@ -70,7 +80,7 @@ const Index = (props: Props) => {
               </div>
               <div className="space-x-2 items-center">
                 <button
-                  // onClick={() => bookmark(note.id)}
+                  onClick={toggleBookmark}
                   className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
                 >
                   <span className="sr-only">
@@ -90,9 +100,8 @@ const Index = (props: Props) => {
                   <span className="sr-only">Delete note</span>
                   <TrashIcon
                     aria-hidden="true"
-                    className="w-6 h-6 text-brand from-rose-400 to-rose-600"
-                    fill={note.bookmarked ? "url(#grad1)" : "none"}
-                    stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
+                    className="w-6 h-6 text-brand from-rose-400 to-red-500"
+                    fill="url(#grad2)"
                   />
                 </button>
               </div>

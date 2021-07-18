@@ -24,7 +24,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       res.status(500).json(error);
     }
   } else if (req.method === "PUT") {
-    const { content } = req.body;
+    const { content, bookmarked } = req.body;
+    console.log("bookmarked", bookmarked);
     const { id: noteId } = req.query;
 
     try {
@@ -34,6 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         },
         data: {
           content: content,
+          bookmarked: bookmarked
         },
       });
       res.status(200).json(updatedNote);
