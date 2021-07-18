@@ -140,7 +140,7 @@ const Index = (props: Props) => {
                 <textarea
                   onKeyDown={handleUpdate}
                   rows={5}
-                  placeholder="Markdown Content ..."
+                  placeholder="Content ..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   className="bg-gray-900 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
