@@ -126,7 +126,7 @@ const Index = (props: Props) => {
                 )}
 
                 {previewActive && (
-                  <div className="py-2 prose prose-sm">
+                  <div className="py-2 prose">
                     <ReactMarkdown
                       remarkPlugins={[remarkMath]}
                       rehypePlugins={[rehypeKatex]}
