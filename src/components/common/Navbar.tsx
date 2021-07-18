@@ -1,6 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/client";
 import React from "react";
 import { Menu, Transition } from "@headlessui/react";
+import { LoginIcon, NotelistIcon } from "@/components/icons";
 
 interface Props {}
 
@@ -12,33 +13,19 @@ export const Navbar = (props: Props) => {
     <nav role="main" className="py-4">
       <div className="flex items-center justify-between max-w-4xl mx-auto px-4 lg:px-6">
         <div className="flex items-center space-x-2">
-          <svg
-            className="w-8 h-8"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="24" cy="24" r="20" fill="url(#paint0_linear)" />
-            <defs>
-              <linearGradient
-                id="paint0_linear"
-                x1="9.5"
-                y1="9"
-                x2="37"
-                y2="39.5"
-                gradientUnits="userSpaceOnUse"
-              >
-                <stop stopColor="#818CF8" />
-                <stop offset="1" stopColor="#A855F7" />
-              </linearGradient>
-            </defs>
-          </svg>
-
-          <a href="/" className="font-medium">Notelist</a>
+          <NotelistIcon className="flex-shrink-0 w-8 h-8" />
+          <a href="/" className="font-medium">
+            Notelist
+          </a>
         </div>
         {!session && (
           <>
-            <button onClick={() => signIn()}>Sign in</button>
+            <button type="button" onClick={() => signIn()}>
+              <span className="flex items-center w-full select-none py-2 px-3">
+                <LoginIcon aria-hidden="true" className="w-5 h-5 mr-1" />
+                Sign In
+              </span>
+            </button>
           </>
         )}
         {session && (
