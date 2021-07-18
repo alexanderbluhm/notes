@@ -106,8 +106,7 @@ const Index = (props: Props) => {
                 </button>
                 <DeleteDialog onDelete={handleDelete}>
                   <Menu.Button
-                    // onClick={() => bookmark(note.id)}
-                    className="invisible xl:visible inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                    className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
                   >
                     <span className="sr-only">Delete note</span>
                     <TrashIcon
@@ -121,6 +120,12 @@ const Index = (props: Props) => {
             </div>
 
             <div className="relative">
+              {previewActive && !note.content && !content && (
+                <div className="rounded-md p-3 text-brand border border-brand">
+                  Click on <b>edit</b> to add more content to the note!
+                </div>
+              )}
+
               {previewActive && (
                 <div className="py-2">
                   <ReactMarkdown
