@@ -88,7 +88,7 @@ const Index = (props: Props) => {
                 {formatRelative(parseISO(note.createdAt), new Date())}
               </span>
             </div>
-            <div className="flex space-x-2 items-center">
+            <div className="flex sm:space-x-2 items-center">
               <button
                 onClick={toggleBookmark}
                 className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
@@ -123,7 +123,7 @@ const Index = (props: Props) => {
               </DeleteDialog>
 
               {/* Seperator */}
-              <div className="w-px h-6 bg-gray-700 ml-6"></div>
+              <div className="w-px h-6 bg-gray-700 ml-1 mr-1 sm:mr-0 sm:ml-6"></div>
               <button
                 onClick={handleUpdate}
                 style={{ zIndex: 10 }}
