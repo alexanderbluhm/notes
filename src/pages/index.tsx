@@ -84,82 +84,86 @@ const Home = () => {
       <Navbar />
 
       <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 space-y-8">
-        {!data && !error && <div>Loading ...</div>}
+        {/* {!data && !error && <div>Loading ...</div>} */}
+
         {error && error.status === 401 && (
           <Alert onClick={signIn} text="Please login to create notes" />
         )}
-        {data && (
-          <AnimateSharedLayout>
-            {/* {JSON.stringify(data)} */}
-            <section aria-labelledby="add-new">
-              <h2 id="add-new" className="sr-only">
-                Add new note
-              </h2>
 
-              <FlexibleTextarea
-                value={noteText}
-                setValue={setNoteText}
-                handleKeyDown={handleCreate}
-              />
+        <AnimateSharedLayout>
+          {/* {JSON.stringify(data)} */}
+          <section aria-labelledby="add-new">
+            <h2 id="add-new" className="sr-only">
+              Add new note
+            </h2>
+
+            <FlexibleTextarea
+              value={noteText}
+              setValue={setNoteText}
+              handleKeyDown={handleCreate}
+            />
+          </section>
+
+          <div className="divide-y divide-gray-800">
+            <section
+              aria-labelledby="bookmarked"
+              className="pb-8 px-4 space-y-4"
+            >
+              <div className="flex items-end justify-between">
+                <h2
+                  style={{ zIndex: 10 }}
+                  id="bookmarked"
+                  className="text-2xl font-bold isolate block"
+                >
+                  Bookmarked
+                </h2>
+              </div>
+              <ul className="space-y-3">
+                {data &&
+                  data
+                    .filter((note) => note.bookmarked)
+                    .map((note) => (
+                      <Note.Item
+                        as="li"
+                        key={note.id}
+                        bookmark={handleBookmark}
+                        note={note}
+                      />
+                    ))}
+
+                {!data && !error && <li>Loading ...</li>}
+              </ul>
             </section>
 
-            <div className="divide-y divide-gray-800">
-              <section
-                aria-labelledby="bookmarked"
-                className="pb-8 px-4 space-y-4"
-              >
-                <div className="flex items-end justify-between">
-                  <h2
-                    style={{ zIndex: 10 }}
-                    id="bookmarked"
-                    className="text-2xl font-bold isolate block"
-                  >
-                    Bookmarked
-                  </h2>
-                </div>
-                <ul className="space-y-3">
-                  {data &&
-                    data
-                      .filter((note) => note.bookmarked)
-                      .map((note) => (
-                        <Note.Item
-                          as="li"
-                          key={note.id}
-                          bookmark={handleBookmark}
-                          note={note}
-                        />
-                      ))}
-                </ul>
-              </section>
+            <section aria-labelledby="latest" className="pt-8 px-4 space-y-4">
+              <div className="flex items-end justify-between">
+                <h2
+                  style={{ zIndex: 10 }}
+                  id="latest"
+                  className="text-2xl font-bold isolate"
+                >
+                  Latest
+                </h2>
+              </div>
 
-              <section aria-labelledby="latest" className="pt-8 px-4 space-y-4">
-                <div className="flex items-end justify-between">
-                  <h2
-                    style={{ zIndex: 10 }}
-                    id="latest"
-                    className="text-2xl font-bold isolate"
-                  >
-                    Latest
-                  </h2>
-                </div>
+              <ul className="space-y-3">
+                {data &&
+                  data
+                    .filter((note) => !note.bookmarked)
+                    .map((note) => (
+                      <Note.Item
+                        as="li"
+                        key={note.id}
+                        bookmark={handleBookmark}
+                        note={note}
+                      />
+                    ))}
 
-                <ul className="space-y-3">
-                  {data &&
-                    data
-                      .filter((note) => !note.bookmarked)
-                      .map((note) => (
-                        <Note.Item
-                          as="li"
-                          key={note.id}
-                          bookmark={handleBookmark}
-                          note={note}
-                        />
-                      ))}
-                </ul>
-              </section>
-            </div>
-          </AnimateSharedLayout>
-        )}
+                {!data && !error && <li>Loading ...</li>}
+              </ul>
+            </section>
+          </div>
+        </AnimateSharedLayout>
       </main>
 
       <footer></footer>
