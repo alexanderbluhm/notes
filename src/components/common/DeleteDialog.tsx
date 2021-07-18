@@ -15,9 +15,9 @@ export const DeleteDialog: React.FC<Props> = (props) => {
           enter="transition duration-125 ease-out"
           enterFrom="transform scale-95 opacity-0"
           enterTo="transform scale-100 opacity-100"
-          leave="transition duration-100 ease-out"
+          leave="transition origin-top-right duration-300 ease-out"
           leaveFrom="transform scale-100 opacity-100"
-          leaveTo="transform scale-95 opacity-0"
+          leaveTo="transform scale-[0.15] opacity-0"
         >
           <Menu.Items
             className="absolute z-50 top-full right-0 w-48 mt-1 -mr-0.5 bg-gray-900 shadow-lg rounded-md py-1 text-base ring-1 ring-brand ring-opacity-5 overflow-auto focus:outline-none sm:text-sm"
