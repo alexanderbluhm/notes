@@ -54,9 +54,7 @@ const Index = (props: Props) => {
     // remove the note from the cache
     _mutate(
       "/api/notes",
-      async (notes) => {
-        return notes.filter((n) => n.id !== note.id);
-      },
+      async (notes) => (notes ? notes.filter((n) => n.id !== note.id) : []),
       false
     );
     router.replace("/");
@@ -90,7 +88,7 @@ const Index = (props: Props) => {
   };
 
   return (
-    <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 divide-y divide-gray-800">
+    <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
       {note && (
         <>
           <div className="flex items-center justify-between pb-6">
@@ -101,7 +99,7 @@ const Index = (props: Props) => {
                 {formatRelative(parseISO(note.createdAt), new Date())}
               </span>
             </div>
-            <div className="flex sm:space-x-2 items-center">
+            <div className="flex items-center sm:space-x-2">
               <button
                 onClick={toggleBookmark}
                 className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
@@ -136,7 +134,7 @@ const Index = (props: Props) => {
               </DeleteDialog>
 
               {/* Seperator */}
-              <div className="w-px h-6 bg-gray-700 ml-1 mr-1 sm:mr-0 sm:ml-6"></div>
+              <div className="w-px h-6 ml-1 mr-1 bg-gray-700 sm:mr-0 sm:ml-6"></div>
               <Button
                 onClick={handleUpdate}
                 style={{ zIndex: 10 }}
@@ -162,10 +160,14 @@ const Index = (props: Props) => {
                   <ReactMarkdown
                     remarkPlugins={[remarkMath]}
                     rehypePlugins={[rehypeKatex]}
-                    children={content.length > 0 ? content : `
+                    children={
+                      content.length > 0
+                        ? content
+                        : `
 Click on **edit** to add content to the note ✨  
 You can even add ***markdown*** or $LaTeX$ 
-                    `}
+                    `
+                    }
                   />
                 </div>
               )}
@@ -175,13 +177,13 @@ You can even add ***markdown*** or $LaTeX$
                   placeholder="Content ..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="bg-gray-900 bg-opacity-70 placeholder-gray-500 isolate flex justify-between items-center px-3 py-3 w-full rounded-md"
+                  className="flex items-center justify-between w-full px-3 py-3 placeholder-gray-500 bg-gray-900 rounded-md bg-opacity-70 isolate"
                 >
                   {note?.content}
                 </TextareaAutosize>
               )}
 
-              <div className="absolute top-2 right-2 flex items-center justify-between space-x-2">
+              <div className="absolute flex items-center justify-between space-x-2 top-2 right-2">
                 <button
                   onClick={() => setPreviewActive((prev) => !prev)}
                   style={{ zIndex: 10 }}

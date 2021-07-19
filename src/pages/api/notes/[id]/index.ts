@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const note = await prisma.note.findFirst({
         // include: { author: true },
         where: {
-          id: parseInt(id.toString()),
+          id: id.toString(),
           author: {
             id: session.id as string,
           },
@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       const updatedNote = await prisma.note.update({
         where: {
-          id: parseInt(noteId.toString()),
+          id: noteId.toString(),
         },
         data: {
           content: content,
@@ -47,7 +47,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     try {
       await prisma.note.delete({
         where: {
-          id: parseInt(noteId.toString()),
+          id: noteId.toString(),
         },
       });
       res.status(200).json({});
