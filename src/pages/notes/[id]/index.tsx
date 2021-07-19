@@ -65,7 +65,6 @@ const Index = (props: Props) => {
   const handleUpdate = async () => {
     // if nothing changed we don't want an update
     if (note.content === content) return;
-
     setPreviewActive(true);
 
     let updatedNote = { ...note };
@@ -141,7 +140,7 @@ const Index = (props: Props) => {
               <Button
                 onClick={handleUpdate}
                 style={{ zIndex: 10 }}
-                className="hover:bg-gray-800 border border-transparent transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
+                className="hover:bg-gray-800 active:bg-gray-900 border border-transparent transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
                 loading={loading}
               >
                 Save
