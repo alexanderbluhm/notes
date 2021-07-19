@@ -158,18 +158,15 @@ const Index = (props: Props) => {
 
           <div className="pt-6">
             <div className="relative">
-              {previewActive && !note.content && !content && (
-                <div className="py-3 text-gray-400 pr-20">
-                  Click on <b>edit</b> to add more content to the note!
-                </div>
-              )}
-
               {previewActive && (
                 <div className="py-2 prose">
                   <ReactMarkdown
                     remarkPlugins={[remarkMath]}
                     rehypePlugins={[rehypeKatex]}
-                    children={content}
+                    children={content.length > 0 ? content : `
+Click on **edit** to add content to the note ✨  
+You can even add ***markdown*** or $LaTeX$ 
+                    `}
                   />
                 </div>
               )}

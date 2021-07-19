@@ -40,6 +40,10 @@ module.exports = {
               color: colors.gray[100],
               fontWeight: '500'
             },
+            h4: {
+              color: colors.gray[100],
+              fontWeight: '500'
+            },
             strong: {
               color: colors.gray[300]
             }
