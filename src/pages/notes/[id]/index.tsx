@@ -10,6 +10,7 @@ import { formatRelative, parseISO } from "date-fns";
 import { BookmarkIcon, LockIcon, TrashIcon } from "@/components/icons";
 import { Menu } from "@headlessui/react";
 import { useNotification } from "@/lib/useNotification";
+import TextareaAutosize from "react-textarea-autosize";
 
 interface Props {}
 
@@ -153,15 +154,14 @@ const Index = (props: Props) => {
               )}
 
               {!previewActive && (
-                <textarea
-                  rows={5}
+                <TextareaAutosize
                   placeholder="Content ..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="bg-gray-900 bg-opacity-70 placeholder-gray-500 isolate flex justify-between items-center px-3 py-2 w-full rounded-md"
+                  className="bg-gray-900 bg-opacity-70 placeholder-gray-500 isolate flex justify-between items-center px-3 py-3 w-full rounded-md"
                 >
                   {note?.content}
-                </textarea>
+                </TextareaAutosize>
               )}
 
               <div className="absolute top-2 right-2 flex items-center justify-between space-x-2">

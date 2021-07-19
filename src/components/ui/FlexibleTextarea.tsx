@@ -1,6 +1,7 @@
 import { useActiveId } from "@/lib/useActive";
 import { motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import TextareaAutosize from "react-textarea-autosize";
 
 const spring = {
   type: "spring",
@@ -14,14 +15,14 @@ interface Props {
   handleKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
-const NAME = "note-input"
+const NAME = "note-input";
 
 export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
   const { id: activeId, setActiveId } = useActiveId((state) => state);
   const ref = useRef<HTMLTextAreaElement>();
 
   const handleChange = (value: string) => {
-    setValue(value)
+    setValue(value);
   };
 
   const handleKey = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -33,14 +34,14 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
       setActiveId(NAME);
       ref.current.focus();
     }
-  }
+  };
 
   useEffect(() => {
-    document.addEventListener('keydown', handleDocumentKey)
+    document.addEventListener("keydown", handleDocumentKey);
     return () => {
-      document.removeEventListener('keydown', handleDocumentKey)
-    }
-  }, [])
+      document.removeEventListener("keydown", handleDocumentKey);
+    };
+  }, []);
 
   return (
     <div className="relative w-full">
@@ -57,7 +58,7 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
       )}
 
       <div className="relative flex items-center justify-center">
-        <textarea
+        <TextareaAutosize
           ref={ref}
           value={value}
           onChange={(e) => handleChange(e.target.value)}
@@ -67,8 +68,12 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
           spellCheck={false}
           className="w-full isolate bg-transparent resize-none overflow-y-hidden py-4 pl-4 pr-16 rounded-md focus:outline-none placeholder-gray-500"
           placeholder="Add Quick Note"
-        ></textarea>
-        <div className={`hidden sm:flex transition-opacity absolute inset-y-0 right-0 items-center justify-center pr-3 ${activeId === NAME ? "opacity-100" : "opacity-0"}`}>
+        />
+        <div
+          className={`hidden sm:flex transition-opacity absolute inset-y-0 right-0 items-center justify-center pr-3 ${
+            activeId === NAME ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <kbd className="inline-flex h-8 items-center border border-gray-700 rounded px-2 text-sm font-sans font-medium text-gray-400">
             ⌘K
           </kbd>
