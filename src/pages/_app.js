@@ -20,6 +20,7 @@ const fetcher = async (...args) => {
 };
 
 const App = ({ Component, pageProps }) => {
+  const layoutProps = Component.layoutProps;
   return (
     <div className="bg-black min-h-screen text-white">
       <Provider session={pageProps.session}>
@@ -31,8 +32,7 @@ const App = ({ Component, pageProps }) => {
           }}
         >
           <Notifications />
-          <Navbar />
-
+          {(!layoutProps || layoutProps.navbar) && <Navbar />}
           <Component {...pageProps} />
         </SWRConfig>
       </Provider>

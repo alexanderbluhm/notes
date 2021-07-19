@@ -17,4 +17,7 @@ const verifyRequest = ({ baseUrl }) => {
   );
 };
 
+verifyRequest.layoutProps = {
+  navbar: false,
+};
 export default verifyRequest;

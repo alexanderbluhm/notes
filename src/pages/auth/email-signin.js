@@ -2,7 +2,7 @@ import { getCsrfToken } from "next-auth/client";
 
 // Source: https://next-auth.js.org/configuration/pages#email-sign-in
 
-export default function SignIn({ csrfToken }) {
+function SignIn({ csrfToken }) {
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <form
@@ -45,3 +45,8 @@ export async function getServerSideProps(context) {
     props: { csrfToken },
   };
 }
+
+SignIn.layoutProps = {
+  navbar: false
+}
+export default SignIn;
