@@ -1,7 +1,7 @@
 import { DeleteDialog, Navbar } from "@/components/common";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate as _mutate } from "swr";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
@@ -11,6 +11,7 @@ import { BookmarkIcon, LockIcon, TrashIcon } from "@/components/icons";
 import { Menu } from "@headlessui/react";
 import { useNotification } from "@/lib/useNotification";
 import TextareaAutosize from "react-textarea-autosize";
+import { Button } from "@/components/ui";
 
 interface Props {}
 
@@ -19,6 +20,7 @@ const Index = (props: Props) => {
   const router = useRouter();
   const [previewActive, setPreviewActive] = useState(true);
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false);
   const { id } = router.query;
   const {
     data: note,
@@ -40,6 +42,7 @@ const Index = (props: Props) => {
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     await fetch(`/api/notes/${note.id}`, {
       method: "DELETE",
     }).catch((ex) => {
@@ -47,6 +50,15 @@ const Index = (props: Props) => {
     });
 
     addNotification({ text: "Deleted Note", type: "info" });
+    setLoading(false);
+    // remove the note from the cache
+    _mutate(
+      "/api/notes",
+      async (notes) => {
+        return notes.filter((n) => n.id !== note.id);
+      },
+      false
+    );
     router.replace("/");
   };
 
@@ -63,6 +75,7 @@ const Index = (props: Props) => {
   };
 
   const updateNote = async (note) => {
+    setLoading(true);
     await fetch(`/api/notes/${note.id}`, {
       method: "PUT",
       headers: {
@@ -73,7 +86,7 @@ const Index = (props: Props) => {
     }).catch((ex) => {
       console.error(ex);
     });
-
+    setLoading(false);
     addNotification({ text: "Updated Note", type: "info" });
   };
 
@@ -125,13 +138,21 @@ const Index = (props: Props) => {
 
               {/* Seperator */}
               <div className="w-px h-6 bg-gray-700 ml-1 mr-1 sm:mr-0 sm:ml-6"></div>
-              <button
+              <Button
+                onClick={handleUpdate}
+                style={{ zIndex: 10 }}
+                className="hover:bg-gray-800 border border-transparent transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
+                loading={loading}
+              >
+                Save
+              </Button>
+              {/* <button
                 onClick={handleUpdate}
                 style={{ zIndex: 10 }}
                 className="hover:bg-gray-800 border border-transparent transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
               >
                 Save
-              </button>
+              </button> */}
             </div>
           </div>
 
