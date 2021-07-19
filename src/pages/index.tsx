@@ -82,7 +82,6 @@ const Home = () => {
       <Head>
         <title>Notelist</title>
         <meta key="description" content="Lightweight note app" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 space-y-8">
