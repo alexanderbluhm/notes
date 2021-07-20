@@ -1,6 +1,6 @@
 import React from "react";
 
-export const BookmarkIcon = (props) => {
+export const BookmarkIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} viewBox="0 0 24 24">
       <defs>

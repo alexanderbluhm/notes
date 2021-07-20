@@ -1,6 +1,6 @@
 import React from "react";
 
-export const RefreshIcon = (props) => {
+export const RefreshIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} fill="currentColor" viewBox="0 0 24 24">
       <path

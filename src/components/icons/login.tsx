@@ -1,6 +1,6 @@
 import React from "react";
 
-export const LoginIcon = (props) => {
+export const LoginIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} fill="none" viewBox="0 0 24 24">
       <path
