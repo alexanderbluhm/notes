@@ -64,7 +64,7 @@ model Note {
   updatedAt DateTime @updatedAt
   published Boolean  @default(false)
   bookmarked Boolean @default(false)
-  content   String?
+  content   String?  @db.Text
   title     String   @db.VarChar(255)
   authorId  String?
   author    User?    @relation(fields: [authorId], references: [id])
