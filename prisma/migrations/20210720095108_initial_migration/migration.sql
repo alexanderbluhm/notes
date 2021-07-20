@@ -1,27 +1,3 @@
-/*
-  Warnings:
-
-  - The primary key for the `User` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - You are about to drop the column `role` on the `User` table. All the data in the column will be lost.
-  - Added the required column `updatedAt` to the `User` table without a default value. This is not possible if the table is not empty.
-
-*/
--- DropForeignKey
-ALTER TABLE `Note` DROP FOREIGN KEY `Note_ibfk_1`;
-
--- AlterTable
-ALTER TABLE `Note` MODIFY `authorId` VARCHAR(191);
-
--- AlterTable
-ALTER TABLE `User` DROP PRIMARY KEY,
-    DROP COLUMN `role`,
-    ADD COLUMN `emailVerified` DATETIME(3),
-    ADD COLUMN `image` VARCHAR(191),
-    ADD COLUMN `updatedAt` DATETIME(3) NOT NULL,
-    MODIFY `id` VARCHAR(191) NOT NULL,
-    MODIFY `email` VARCHAR(191),
-    ADD PRIMARY KEY (`id`);
-
 -- CreateTable
 CREATE TABLE `Account` (
     `id` VARCHAR(191) NOT NULL,
@@ -35,6 +11,7 @@ CREATE TABLE `Account` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    INDEX `userId`(`userId`),
     UNIQUE INDEX `Account.providerId_providerAccountId_unique`(`providerId`, `providerAccountId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -51,6 +28,21 @@ CREATE TABLE `Session` (
 
     UNIQUE INDEX `Session.sessionToken_unique`(`sessionToken`),
     UNIQUE INDEX `Session.accessToken_unique`(`accessToken`),
+    INDEX `userId`(`userId`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `User` (
+    `id` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `email` VARCHAR(191),
+    `name` VARCHAR(191),
+    `emailVerified` DATETIME(3),
+    `image` VARCHAR(191),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `User.email_unique`(`email`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -65,6 +57,21 @@ CREATE TABLE `VerificationRequest` (
 
     UNIQUE INDEX `VerificationRequest.token_unique`(`token`),
     UNIQUE INDEX `VerificationRequest.identifier_token_unique`(`identifier`, `token`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Note` (
+    `id` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+    `published` BOOLEAN NOT NULL DEFAULT false,
+    `title` VARCHAR(255) NOT NULL,
+    `authorId` VARCHAR(191),
+    `bookmarked` BOOLEAN NOT NULL DEFAULT false,
+    `content` TEXT,
+
+    INDEX `authorId`(`authorId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
