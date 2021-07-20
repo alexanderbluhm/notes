@@ -1,6 +1,6 @@
 import { Menu, Popover, Transition } from "@headlessui/react";
 import React, { useState } from "react";
-import { ClipboardIcon, LockIcon } from "../icons";
+import { ClipboardIcon, LockIcon, LockOpenIcon } from "../icons";
 import { Switch } from "@/components/ui";
 
 interface DeleteDialogProps {
@@ -65,10 +65,18 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = (props) => {
   );
 };
 
-type AccessDialogProps = {};
+type AccessDialogProps = {
+  onAccessableChanged: (value: boolean) => void;
+  disabled?: boolean;
+};
 
 export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
-  const [open, setOpen] = useState(false);
+  const [accessable, setAccessable] = useState(false);
+
+  const handleAccessableChanged = (value: boolean) => {
+    props.onAccessableChanged(value)
+    setAccessable(value);
+  }
 
   return (
     <Popover as="div" className="relative">
@@ -77,11 +85,21 @@ export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
         as="button"
       >
         <span className="sr-only">Managae visibility</span>
-        <LockIcon
-          aria-hidden="true"
-          className="w-6 h-6 from-green-400 to-green-500"
-          stroke={"url(#grad3)"}
-        />
+        {!accessable && (
+          <LockIcon
+            aria-hidden="true"
+            className="w-6 h-6 from-green-400 to-green-500"
+            stroke={"url(#grad3)"}
+          />
+        )}
+
+        {accessable && (
+          <LockOpenIcon
+            aria-hidden="true"
+            className="w-6 h-6 from-green-400 to-green-500"
+            stroke={"url(#grad4)"}
+          />
+        )}
       </Popover.Button>
       <Transition
         as={React.Fragment}
@@ -96,13 +114,14 @@ export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
           <div className="px-4 pt-2 pb-3">
             <h3 className="sr-only">Manage access for this note</h3>
             <Switch
+              disbaled={props.disabled}
               label="Enable read access"
               description="All people you share this link with can read this note."
-              enabled={open}
-              setEnabled={setOpen}
+              enabled={accessable}
+              setEnabled={handleAccessableChanged}
             />
           </div>
-          {open && (
+          {accessable && (
             <div className="flex items-center px-4 pt-3 pb-2 space-x-2 overflow-hidden text-sm">
               <span className="text-gray-400 truncate">
                 http://localhost:3000/notes/3b54d9f7-28ab-4552-a6c3-135bbb474b4c

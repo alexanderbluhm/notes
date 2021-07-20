@@ -41,6 +41,12 @@ const Index = (props: Props) => {
     await updateNote(updated);
   };
 
+  const handleAccessibleChanged = async (value: boolean) => {
+    // const updated = { ...note, accessible: value };
+    const updated = { ...note, bookmarked: !note.bookmarked };
+    updateNote(updated);
+  }
+
   const handleDelete = async () => {
     setLoading(true);
     await fetch(`/api/notes/${note.id}`, {
@@ -129,7 +135,7 @@ const Index = (props: Props) => {
                   stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
                 />
               </button>
-              <AccessDialog />
+              <AccessDialog disabled={loading} onAccessableChanged={handleAccessibleChanged} />
               <DeleteDialog onDelete={handleDelete}>
                 <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
                   <span className="sr-only">Delete note</span>
