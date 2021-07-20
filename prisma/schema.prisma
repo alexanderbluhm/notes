@@ -1,10 +1,10 @@
-generator client {
-  provider = "prisma-client-js"
+datasource db {
+  url      = env("DATABASE_URL")
+  provider = "mysql"
 }
 
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js"
 }
 
 model Account {
@@ -20,8 +20,7 @@ model Account {
   updatedAt          DateTime  @updatedAt
   user               User      @relation(fields: [userId], references: [id])
 
-  @@unique([providerId, providerAccountId], name: "Account.providerId_providerAccountId_unique")
-  @@index([userId], name: "userId")
+  @@unique([providerId, providerAccountId])
 }
 
 model Session {
@@ -33,21 +32,19 @@ model Session {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id])
-
-  @@index([userId], name: "userId")
 }
 
 model User {
   id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  email         String?   @unique
   name          String?
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
+  createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
-  notes         Note[]
   sessions      Session[]
+  notes         Note[]
 }
 
 model VerificationRequest {
@@ -58,19 +55,22 @@ model VerificationRequest {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([identifier, token], name: "VerificationRequest.identifier_token_unique")
+  @@unique([identifier, token])
 }
 
 model Note {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  published  Boolean  @default(false)
-  title      String   @db.VarChar(255)
-  authorId   String?
-  bookmarked Boolean  @default(false)
-  content    String?  @db.Text
-  author     User?    @relation(fields: [authorId], references: [id])
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(false)
+  bookmarked Boolean @default(false)
+  content   String?  @db.Text
+  title     String   @db.VarChar(255)
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id])
+}
 
-  @@index([authorId], name: "authorId")
+enum Role {
+  USER
+  ADMIN
 }
