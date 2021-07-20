@@ -31,7 +31,7 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
         {format(parseISO(note.createdAt), "hh:mm")}
       </span>
       <div
-        className="relative w-full"
+        className="relative w-full xl:w-[calc(100%-3rem)]"
         onMouseEnter={() => setActiveId(note.id)}
       >
         {note.id === activeId && (
@@ -44,9 +44,9 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
             className="absolute inset-0 bg-gray-900 rounded-md"
           ></motion.div>
         )}
-        <span className="flex items-center justify-between w-full px-4 py-2 bg-transparent rounded-md isolate">
+        <span className="flex items-center justify-between px-4 py-2 bg-transparent rounded-md isolate">
           <Link href={!note.loading ? `/notes/${note.id}` : "#"}>
-            <a className="block w-full mr-12" href="">
+            <a className="w-full mr-12 overflow-hidden break-words" href="">
               {note.title}
             </a>
           </Link>
