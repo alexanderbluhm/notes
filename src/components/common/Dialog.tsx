@@ -65,17 +65,17 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = (props) => {
   );
 };
 
-type AccessDialogProps = {
+type PublishedDialogProps = {
   onAccessableChanged: (value: boolean) => void;
   disabled?: boolean;
 };
 
-export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
-  const [accessable, setAccessable] = useState(false);
+export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
+  const [published, setPublished] = useState(false);
 
   const handleAccessableChanged = (value: boolean) => {
     props.onAccessableChanged(value)
-    setAccessable(value);
+    setPublished(value);
   }
 
   return (
@@ -85,7 +85,7 @@ export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
         as="button"
       >
         <span className="sr-only">Managae visibility</span>
-        {!accessable && (
+        {!published && (
           <LockIcon
             aria-hidden="true"
             className="w-6 h-6 from-green-400 to-green-500"
@@ -93,7 +93,7 @@ export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
           />
         )}
 
-        {accessable && (
+        {published && (
           <LockOpenIcon
             aria-hidden="true"
             className="w-6 h-6 from-green-400 to-green-500"
@@ -115,13 +115,13 @@ export const AccessDialog: React.FC<AccessDialogProps> = (props) => {
             <h3 className="sr-only">Manage access for this note</h3>
             <Switch
               disbaled={props.disabled}
-              label="Enable read access"
+              label="Publish note"
               description="All people you share this link with can read this note."
-              enabled={accessable}
+              enabled={published}
               setEnabled={handleAccessableChanged}
             />
           </div>
-          {accessable && (
+          {published && (
             <div className="flex items-center px-4 pt-3 pb-2 space-x-2 overflow-hidden text-sm">
               <span className="text-gray-400 truncate">
                 http://localhost:3000/notes/3b54d9f7-28ab-4552-a6c3-135bbb474b4c

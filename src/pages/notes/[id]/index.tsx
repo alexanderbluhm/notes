@@ -1,4 +1,4 @@
-import { AccessDialog, DeleteDialog, Navbar } from "@/components/common";
+import { PublishedDialog, DeleteDialog, Navbar } from "@/components/common";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import useSWR, { mutate as _mutate } from "swr";
@@ -41,9 +41,8 @@ const Index = (props: Props) => {
     await updateNote(updated);
   };
 
-  const handleAccessibleChanged = async (value: boolean) => {
-    // const updated = { ...note, accessible: value };
-    const updated = { ...note, bookmarked: !note.bookmarked };
+  const handlePublishedChanged = async (value: boolean) => {
+    const updated = { ...note, published: value };
     updateNote(updated);
   }
 
@@ -135,7 +134,7 @@ const Index = (props: Props) => {
                   stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
                 />
               </button>
-              <AccessDialog disabled={loading} onAccessableChanged={handleAccessibleChanged} />
+              <PublishedDialog disabled={loading} onAccessableChanged={handlePublishedChanged} />
               <DeleteDialog onDelete={handleDelete}>
                 <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
                   <span className="sr-only">Delete note</span>
