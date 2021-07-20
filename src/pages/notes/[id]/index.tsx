@@ -134,7 +134,7 @@ const Index = (props: Props) => {
                   stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
                 />
               </button>
-              <PublishedDialog disabled={loading} onAccessableChanged={handlePublishedChanged} />
+              <PublishedDialog published={note.published} disabled={loading} onPublishedChanged={handlePublishedChanged} />
               <DeleteDialog onDelete={handleDelete}>
                 <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
                   <span className="sr-only">Delete note</span>

@@ -66,17 +66,12 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = (props) => {
 };
 
 type PublishedDialogProps = {
-  onAccessableChanged: (value: boolean) => void;
+  onPublishedChanged: (value: boolean) => void;
+  published: boolean;
   disabled?: boolean;
 };
 
 export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
-  const [published, setPublished] = useState(false);
-
-  const handleAccessableChanged = (value: boolean) => {
-    props.onAccessableChanged(value)
-    setPublished(value);
-  }
 
   return (
     <Popover as="div" className="relative">
@@ -85,7 +80,7 @@ export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
         as="button"
       >
         <span className="sr-only">Managae visibility</span>
-        {!published && (
+        {!props.published && (
           <LockIcon
             aria-hidden="true"
             className="w-6 h-6 from-green-400 to-green-500"
@@ -93,7 +88,7 @@ export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
           />
         )}
 
-        {published && (
+        {props.published && (
           <LockOpenIcon
             aria-hidden="true"
             className="w-6 h-6 from-green-400 to-green-500"
@@ -117,11 +112,11 @@ export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
               disbaled={props.disabled}
               label="Publish note"
               description="All people you share this link with can read this note."
-              enabled={published}
-              setEnabled={handleAccessableChanged}
+              enabled={props.published}
+              setEnabled={props.onPublishedChanged}
             />
           </div>
-          {published && (
+          {props.published && (
             <div className="flex items-center px-4 pt-3 pb-2 space-x-2 overflow-hidden text-sm">
               <span className="text-gray-400 truncate">
                 http://localhost:3000/notes/3b54d9f7-28ab-4552-a6c3-135bbb474b4c
