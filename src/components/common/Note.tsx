@@ -2,7 +2,9 @@ import React from "react";
 import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
 import { useActiveId } from "@/lib/useActive";
-import Link from 'next/link';
+import Link from "next/link";
+import notes from "../../pages/api/notes";
+import { BookmarkIcon, RefreshIcon } from "../icons";
 
 const spring = {
   type: "spring",
@@ -21,10 +23,10 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
   let Component: any = as;
 
   return (
-    <Component className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative">
+    <Component className="xl:w-[calc(5rem+100%)] w-[calc(2rem+100%)] relative flex items-baseline -ml-4 text-gray-200 group xl:-ml-16">
       <span
         style={{ zIndex: 10 }}
-        className="w-8 absolute font-light text-white top-4 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500"
+        className="absolute w-8 mr-4 text-sm font-light text-white transition-opacity duration-500 opacity-0 top-4 right-1 group-hover:opacity-100 xl:text-gray-400 xl:static"
       >
         {format(parseISO(note.createdAt), "hh:mm")}
       </span>
@@ -39,12 +41,14 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
               backgroundColor: "#18181B",
             }}
             transition={spring}
-            className="absolute inset-0 rounded-md bg-gray-900"
+            className="absolute inset-0 bg-gray-900 rounded-md"
           ></motion.div>
         )}
-        <span className="isolate flex justify-between items-center px-3 py-2 w-full rounded-md bg-transparent">
-          <Link href={`/notes/${note.id}`}>
-            <a className="block w-full mr-12" href="">{note.title}</a>
+        <span className="flex items-center justify-between w-full px-4 py-2 bg-transparent rounded-md isolate">
+          <Link href={!note.loading ? `/notes/${note.id}` : "#"}>
+            <a className="block w-full mr-12" href="">
+              {note.title}
+            </a>
           </Link>
           <button
             onClick={() => bookmark(note.id)}
@@ -53,26 +57,22 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
             <span className="sr-only">
               {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
             </span>
-            <svg
-              aria-hidden="true"
-              className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
-              fill={note.bookmarked ? "url(#grad1)" : "none"}
-              stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
-              viewBox="0 0 24 24"
-            >
-              <defs>
-                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="var(--tw-gradient-from)" />
-                  <stop offset="100%" stopColor="var(--tw-gradient-to)" />
-                </linearGradient>
-              </defs>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1"
-                d="M6.75 6.75C6.75 5.64543 7.64543 4.75 8.75 4.75H15.25C16.3546 4.75 17.25 5.64543 17.25 6.75V19.25L12 14.75L6.75 19.25V6.75Z"
-              ></path>
-            </svg>
+
+            {note.loading && (
+              <RefreshIcon
+                className="w-6 h-6 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+
+            {!note.loading && (
+              <BookmarkIcon
+                aria-hidden="true"
+                className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
+                fill={note.bookmarked ? "url(#grad1)" : "none"}
+                stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
+              />
+            )}
           </button>
         </span>
       </div>

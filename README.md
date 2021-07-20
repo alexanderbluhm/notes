@@ -11,6 +11,8 @@ and to migrate you can use
 prisma migrate dev --name "Your message"
 ```
 
+To run prisma studio: `npx prisma studio`
+
 ## Getting Started
 
 First, install the dependencies with `npm install`.
