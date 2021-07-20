@@ -1,4 +1,4 @@
-import { DeleteDialog, Navbar } from "@/components/common";
+import { AccessDialog, DeleteDialog, Navbar } from "@/components/common";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import useSWR, { mutate as _mutate } from "swr";
@@ -73,7 +73,7 @@ const Index = (props: Props) => {
 
   const updateNote = async (note) => {
     setLoading(true);
-    // store the updated note in the cache 
+    // store the updated note in the cache
     mutate(note, false);
     await fetch(`/api/notes/${note.id}`, {
       method: "PUT",
@@ -129,14 +129,7 @@ const Index = (props: Props) => {
                   stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
                 />
               </button>
-              <button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                <span className="sr-only">Managae visibility</span>
-                <LockIcon
-                  aria-hidden="true"
-                  className="w-6 h-6 from-green-400 to-green-500"
-                  stroke={"url(#grad3)"}
-                />
-              </button>
+              <AccessDialog />
               <DeleteDialog onDelete={handleDelete}>
                 <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
                   <span className="sr-only">Delete note</span>
