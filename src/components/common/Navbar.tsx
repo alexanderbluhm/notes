@@ -2,6 +2,7 @@ import { useSession, signIn, signOut } from "next-auth/client";
 import React from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { LoginIcon, NotelistIcon } from "@/components/icons";
+import Link from "next/link";
 
 interface Props {}
 
@@ -11,17 +12,17 @@ export const Navbar = (props: Props) => {
 
   return (
     <nav role="main" className="py-4">
-      <div className="flex items-center justify-between max-w-4xl mx-auto px-4 lg:px-6">
+      <div className="flex items-center justify-between max-w-4xl px-4 mx-auto lg:px-6">
         <div className="flex items-center space-x-2">
           <NotelistIcon className="flex-shrink-0 w-8 h-8" />
-          <a href="/" className="font-medium">
-            Notelist
-          </a>
+          <Link href="/">
+            <a className="font-medium">Notelist</a>
+          </Link>
         </div>
         {!session && (
           <>
             <button type="button" onClick={() => signIn()}>
-              <span className="flex items-center w-full select-none py-2 px-3">
+              <span className="flex items-center w-full px-3 py-2 select-none">
                 <LoginIcon aria-hidden="true" className="w-5 h-5 mr-1" />
                 Sign In
               </span>
@@ -40,7 +41,7 @@ export const Navbar = (props: Props) => {
                   <span className="sr-only">Open user menu</span>
                   <div
                     aria-hidden="true"
-                    className="uppercase inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-900"
+                    className="inline-flex items-center justify-center uppercase bg-gray-900 rounded-full w-7 h-7"
                   >
                     <span className="text-xs font-medium">
                       {userTag.charAt(0)}
