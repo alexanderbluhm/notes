@@ -113,7 +113,7 @@ const Home = () => {
               <div className="flex items-end justify-between">
                 <h2
                   id="bookmarked"
-                  className="block text-2xl font-bold isolate"
+                  className="z-10 block text-2xl font-bold isolate"
                 >
                   Bookmarked
                 </h2>
@@ -139,7 +139,7 @@ const Home = () => {
               <div className="flex items-end justify-between">
                 <h2
                   id="latest"
-                  className="text-2xl font-bold isolate"
+                  className="z-10 text-2xl font-bold isolate"
                 >
                   Latest
                 </h2>
