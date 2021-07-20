@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       if (note.published) return res.status(200).json(note);
 
       // else check if the current user is the user that created the note
-      if (session && session.id && note.authorId === session.id) res.status(200).json(note);
+      if (session && session.id && note.authorId === session.id) return res.status(200).json(note);
 
       // if the note is not published and other than the creator wants access we return a 401
       return res.status(401).send({});
