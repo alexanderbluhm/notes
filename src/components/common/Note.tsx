@@ -42,7 +42,7 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
             className="absolute inset-0 bg-gray-900 rounded-md"
           ></motion.div>
         )}
-        <span className="relative flex items-center justify-between px-4 py-2 rounded-md">
+        <span className="relative z-10 flex items-center justify-between px-4 py-2 rounded-md">
           <Link href={!note.loading ? `/notes/${note.id}` : "#"}>
             <a className="w-full mr-12 overflow-hidden break-words" href="">
               {note.title}
