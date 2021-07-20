@@ -1,10 +1,10 @@
-datasource db {
-  url      = env("DATABASE_URL")
-  provider = "mysql"
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Account {
@@ -20,7 +20,8 @@ model Account {
   updatedAt          DateTime  @updatedAt
   user               User      @relation(fields: [userId], references: [id])
 
-  @@unique([providerId, providerAccountId])
+  @@unique([providerId, providerAccountId], name: "Account.providerId_providerAccountId_unique")
+  @@index([userId], name: "userId")
 }
 
 model Session {
@@ -32,19 +33,21 @@ model Session {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id])
+
+  @@index([userId], name: "userId")
 }
 
 model User {
   id            String    @id @default(cuid())
-  name          String?
+  createdAt     DateTime  @default(now())
   email         String?   @unique
+  name          String?
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
-  sessions      Session[]
   notes         Note[]
+  sessions      Session[]
 }
 
 model VerificationRequest {
@@ -55,22 +58,19 @@ model VerificationRequest {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  @@unique([identifier, token])
+  @@unique([identifier, token], name: "VerificationRequest.identifier_token_unique")
 }
 
 model Note {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  published Boolean  @default(false)
-  bookmarked Boolean @default(false)
-  content   String?  @db.Text
-  title     String   @db.VarChar(255)
-  authorId  String?
-  author    User?    @relation(fields: [authorId], references: [id])
-}
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  published  Boolean  @default(false)
+  title      String   @db.VarChar(255)
+  authorId   String?
+  bookmarked Boolean  @default(false)
+  content    String?  @db.Text
+  author     User?    @relation(fields: [authorId], references: [id])
 
-enum Role {
-  USER
-  ADMIN
+  @@index([authorId], name: "authorId")
 }
