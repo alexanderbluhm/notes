@@ -1,6 +1,6 @@
 import React from "react";
 
-export const NotelistIcon = (props) => {
+export const NotelistIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} viewBox="0 0 48 48" fill="none">
       <circle cx="24" cy="24" r="20" fill="url(#paint0_linear)" />

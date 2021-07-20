@@ -12,6 +12,7 @@ import { Menu } from "@headlessui/react";
 import { useNotification } from "@/lib/useNotification";
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui";
+import Link from "next/link";
 
 interface Props {}
 
@@ -37,7 +38,6 @@ const Index = (props: Props) => {
 
   const toggleBookmark = async () => {
     const updated = { ...note, bookmarked: !note.bookmarked };
-    mutate(updated, false);
     await updateNote(updated);
   };
 
@@ -73,6 +73,8 @@ const Index = (props: Props) => {
 
   const updateNote = async (note) => {
     setLoading(true);
+    // store the updated note in the cache 
+    mutate(note, false);
     await fetch(`/api/notes/${note.id}`, {
       method: "PUT",
       headers: {
@@ -87,14 +89,27 @@ const Index = (props: Props) => {
     addNotification({ text: "Updated Note", type: "info" });
   };
 
+  if (error)
+    return (
+      <div className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
+        <div className="p-4 overflow-hidden text-sm font-light border rounded-md text-brand-red border-brand-red">
+          An error occured.{" "}
+          <Link href="/">
+            <a className="font-normal underline">Back to home</a>
+          </Link>{" "}
+          {Object.values(error).length > 0 && JSON.stringify(error)}
+        </div>
+      </div>
+    );
+
   return (
     <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
       {note && (
         <>
           <div className="flex items-center justify-between pb-6">
-            <div className="">
+            <div className="flex-1 overflow-hidden">
               {/* <Note.Item note={data} bookmark={() => {}} /> */}
-              <h1 className="text-xl font-medium">{note.title}</h1>
+              <h1 className="text-xl font-medium break-words">{note.title}</h1>
               <span className="text-sm text-gray-400">
                 {formatRelative(parseISO(note.createdAt), new Date())}
               </span>
@@ -137,16 +152,14 @@ const Index = (props: Props) => {
               <div className="w-px h-6 ml-1 mr-1 bg-gray-700 sm:mr-0 sm:ml-6"></div>
               <Button
                 onClick={handleUpdate}
-                style={{ zIndex: 10 }}
-                className="hover:bg-gray-800 active:bg-gray-900 border border-transparent transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
+                className="hover:bg-gray-800 active:bg-gray-900 border border-transparent transition-colors px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
                 loading={loading}
               >
                 Save
               </Button>
               {/* <button
                 onClick={handleUpdate}
-                style={{ zIndex: 10 }}
-                className="hover:bg-gray-800 border border-transparent transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
+                className="hover:bg-gray-800 border border-transparent transition-colors px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
               >
                 Save
               </button> */}
@@ -177,7 +190,7 @@ You can even add ***markdown*** or $LaTeX$
                   placeholder="Content ..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="flex items-center justify-between w-full px-3 py-3 placeholder-gray-500 bg-gray-900 rounded-md bg-opacity-70 isolate"
+                  className="flex items-center justify-between w-full px-3 py-3 placeholder-gray-500 bg-gray-900 rounded-md bg-opacity-70"
                 >
                   {note?.content}
                 </TextareaAutosize>
@@ -186,8 +199,7 @@ You can even add ***markdown*** or $LaTeX$
               <div className="absolute flex items-center justify-between space-x-2 top-2 right-2">
                 <button
                   onClick={() => setPreviewActive((prev) => !prev)}
-                  style={{ zIndex: 10 }}
-                  className="hover:bg-gray-800 border border-gray-700 transition-colors isolate px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
+                  className="hover:bg-gray-800 border border-gray-700 transition-colors px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
                 >
                   {previewActive ? "Edit" : "Preview"}
                 </button>

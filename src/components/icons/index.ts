@@ -4,3 +4,4 @@ export * from './login';
 export * from './notelist';
 export * from './lock';
 export * from './refresh';
+export * from './clipboard';

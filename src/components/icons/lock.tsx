@@ -1,6 +1,6 @@
 import React from "react";
 
-export const LockIcon = (props) => {
+export const LockIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <svg {...props} fill="none" viewBox="0 0 24 24">
       <defs>

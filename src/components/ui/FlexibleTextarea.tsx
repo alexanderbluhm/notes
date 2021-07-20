@@ -66,7 +66,7 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
           onKeyDown={handleKey}
           rows={1}
           spellCheck={false}
-          className="w-full py-4 pl-4 pr-16 overflow-y-hidden placeholder-gray-500 bg-transparent rounded-md resize-none isolate focus:outline-none"
+          className="w-full py-4 pl-4 pr-16 overflow-y-hidden placeholder-gray-500 bg-transparent rounded-md resize-none focus:outline-none"
           placeholder="Add Quick Note"
         />
         <div
