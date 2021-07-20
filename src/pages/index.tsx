@@ -23,7 +23,7 @@ const Home = () => {
       const note = {
         title: noteText,
         createdAt: new Date().toISOString(),
-        authorId: 1,
+        loading: true,
       };
 
       // mutate but not revalidate
@@ -78,13 +78,13 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-black text-white">
+    <div className="text-white bg-black">
       <Head>
         <title>Notelist</title>
         <meta key="description" content="Lightweight note app" />
       </Head>
 
-      <main className="max-w-4xl pb-12 mx-auto px-4 lg:px-6 pt-12 xl:pt-20 space-y-8">
+      <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto space-y-8 lg:px-6 xl:pt-20">
         {/* {!data && !error && <div>Loading ...</div>} */}
 
         {error && error.status === 401 && (
@@ -108,13 +108,13 @@ const Home = () => {
           <div className="divide-y divide-gray-800">
             <section
               aria-labelledby="bookmarked"
-              className="pb-8 px-4 space-y-4"
+              className="px-4 pb-8 space-y-4"
             >
               <div className="flex items-end justify-between">
                 <h2
                   style={{ zIndex: 10 }}
                   id="bookmarked"
-                  className="text-2xl font-bold isolate block"
+                  className="block text-2xl font-bold isolate"
                 >
                   Bookmarked
                 </h2>
@@ -136,7 +136,7 @@ const Home = () => {
               </ul>
             </section>
 
-            <section aria-labelledby="latest" className="pt-8 px-4 space-y-4">
+            <section aria-labelledby="latest" className="px-4 pt-8 space-y-4">
               <div className="flex items-end justify-between">
                 <h2
                   style={{ zIndex: 10 }}
