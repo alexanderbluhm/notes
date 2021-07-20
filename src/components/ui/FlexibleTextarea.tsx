@@ -53,7 +53,7 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
             backgroundColor: "#18181B",
           }}
           transition={spring}
-          className="absolute inset-0 rounded-md bg-gray-900"
+          className="absolute inset-0 bg-gray-900 rounded-md"
         />
       )}
 
@@ -66,7 +66,7 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
           onKeyDown={handleKey}
           rows={1}
           spellCheck={false}
-          className="w-full isolate bg-transparent resize-none overflow-y-hidden py-4 pl-4 pr-16 rounded-md focus:outline-none placeholder-gray-500"
+          className="w-full py-4 pl-4 pr-16 overflow-y-hidden placeholder-gray-500 bg-transparent rounded-md resize-none isolate focus:outline-none"
           placeholder="Add Quick Note"
         />
         <div
@@ -74,7 +74,7 @@ export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
             activeId === NAME ? "opacity-100" : "opacity-0"
           }`}
         >
-          <kbd className="inline-flex h-8 items-center border border-gray-700 rounded px-2 text-sm font-sans font-medium text-gray-400">
+          <kbd className="inline-flex items-center h-8 px-2 font-sans text-sm font-medium text-gray-400 border border-gray-700 rounded">
             ⌘K
           </kbd>
         </div>

@@ -21,10 +21,10 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
   let Component: any = as;
 
   return (
-    <Component className="text-gray-200 group -ml-4 xl:-ml-16 flex items-baseline relative">
+    <Component className="xl:w-[calc(5rem+100%)] w-[calc(2rem+100%)] relative flex items-baseline -ml-4 text-gray-200 group xl:-ml-16">
       <span
         style={{ zIndex: 10 }}
-        className="w-8 absolute font-light text-white top-4 right-1 opacity-0 group-hover:opacity-100 mr-4 text-sm xl:text-gray-400 xl:static transition-opacity duration-500"
+        className="absolute w-8 mr-4 text-sm font-light text-white transition-opacity duration-500 opacity-0 top-4 right-1 group-hover:opacity-100 xl:text-gray-400 xl:static"
       >
         {format(parseISO(note.createdAt), "hh:mm")}
       </span>
@@ -39,10 +39,10 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
               backgroundColor: "#18181B",
             }}
             transition={spring}
-            className="absolute inset-0 rounded-md bg-gray-900"
+            className="absolute inset-0 bg-gray-900 rounded-md"
           ></motion.div>
         )}
-        <span className="isolate flex justify-between items-center px-3 py-2 w-full rounded-md bg-transparent">
+        <span className="flex items-center justify-between w-full px-4 py-2 bg-transparent rounded-md isolate">
           <Link href={`/notes/${note.id}`}>
             <a className="block w-full mr-12" href="">{note.title}</a>
           </Link>
