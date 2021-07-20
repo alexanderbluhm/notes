@@ -112,7 +112,6 @@ const Home = () => {
             >
               <div className="flex items-end justify-between">
                 <h2
-                  style={{ zIndex: 10 }}
                   id="bookmarked"
                   className="block text-2xl font-bold isolate"
                 >
@@ -139,7 +138,6 @@ const Home = () => {
             <section aria-labelledby="latest" className="px-4 pt-8 space-y-4">
               <div className="flex items-end justify-between">
                 <h2
-                  style={{ zIndex: 10 }}
                   id="latest"
                   className="text-2xl font-bold isolate"
                 >

@@ -3,7 +3,6 @@ import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
 import { useActiveId } from "@/lib/useActive";
 import Link from "next/link";
-import notes from "../../pages/api/notes";
 import { BookmarkIcon, RefreshIcon } from "../icons";
 
 const spring = {
@@ -25,7 +24,6 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
   return (
     <Component className="xl:w-[calc(5rem+100%)] w-[calc(2rem+100%)] relative flex items-baseline -ml-4 text-gray-200 group xl:-ml-16">
       <span
-        style={{ zIndex: 10 }}
         className="absolute w-8 mr-4 text-sm font-light text-white transition-opacity duration-500 opacity-0 top-4 right-1 group-hover:opacity-100 xl:text-gray-400 xl:static"
       >
         {format(parseISO(note.createdAt), "hh:mm")}
@@ -44,7 +42,7 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
             className="absolute inset-0 bg-gray-900 rounded-md"
           ></motion.div>
         )}
-        <span className="flex items-center justify-between px-4 py-2 bg-transparent rounded-md isolate">
+        <span className="relative flex items-center justify-between px-4 py-2 rounded-md">
           <Link href={!note.loading ? `/notes/${note.id}` : "#"}>
             <a className="w-full mr-12 overflow-hidden break-words" href="">
               {note.title}
