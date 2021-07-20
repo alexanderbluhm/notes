@@ -38,7 +38,6 @@ const Index = (props: Props) => {
 
   const toggleBookmark = async () => {
     const updated = { ...note, bookmarked: !note.bookmarked };
-    mutate(updated, false);
     await updateNote(updated);
   };
 
@@ -74,6 +73,8 @@ const Index = (props: Props) => {
 
   const updateNote = async (note) => {
     setLoading(true);
+    // store the updated note in the cache 
+    mutate(note, false);
     await fetch(`/api/notes/${note.id}`, {
       method: "PUT",
       headers: {
