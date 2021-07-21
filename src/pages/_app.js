@@ -22,7 +22,7 @@ const fetcher = async (...args) => {
 const App = ({ Component, pageProps }) => {
   const layoutProps = Component.layoutProps;
   return (
-    <div className="bg-black min-h-screen text-white">
+    <div className="min-h-screen text-white bg-black">
       <Provider session={pageProps.session}>
         <SWRConfig
           value={{

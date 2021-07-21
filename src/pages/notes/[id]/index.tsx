@@ -1,4 +1,4 @@
-import { DeleteDialog, Navbar } from "@/components/common";
+import { PublishedDialog, DeleteDialog, Navbar } from "@/components/common";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useState } from "react";
 import useSWR, { mutate as _mutate } from "swr";
@@ -13,12 +13,14 @@ import { useNotification } from "@/lib/useNotification";
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui";
 import Link from "next/link";
+import { useSession } from "next-auth/client";
 
 interface Props {}
 
 // Index page for a specific note
 const Index = (props: Props) => {
   const router = useRouter();
+  const [session] = useSession();
   const [previewActive, setPreviewActive] = useState(true);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -31,6 +33,8 @@ const Index = (props: Props) => {
 
   const { addNotification } = useNotification();
 
+  const isAuthor = session && note && session.id === note.authorId;
+
   // set content when note is loaded
   useEffect(() => {
     if (note && note.content) setContent(note.content);
@@ -39,6 +43,11 @@ const Index = (props: Props) => {
   const toggleBookmark = async () => {
     const updated = { ...note, bookmarked: !note.bookmarked };
     await updateNote(updated);
+  };
+
+  const handlePublishedChanged = async (value: boolean) => {
+    const updated = { ...note, published: value };
+    updateNote(updated);
   };
 
   const handleDelete = async () => {
@@ -73,7 +82,7 @@ const Index = (props: Props) => {
 
   const updateNote = async (note) => {
     setLoading(true);
-    // store the updated note in the cache 
+    // store the updated note in the cache
     mutate(note, false);
     await fetch(`/api/notes/${note.id}`, {
       method: "PUT",
@@ -114,56 +123,57 @@ const Index = (props: Props) => {
                 {formatRelative(parseISO(note.createdAt), new Date())}
               </span>
             </div>
-            <div className="flex items-center sm:space-x-2">
-              <button
-                onClick={toggleBookmark}
-                className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
-              >
-                <span className="sr-only">
-                  {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
-                </span>
-                <BookmarkIcon
-                  aria-hidden="true"
-                  className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
-                  fill={note.bookmarked ? "url(#grad1)" : "none"}
-                  stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
-                />
-              </button>
-              <button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                <span className="sr-only">Managae visibility</span>
-                <LockIcon
-                  aria-hidden="true"
-                  className="w-6 h-6 from-green-400 to-green-500"
-                  stroke={"url(#grad3)"}
-                />
-              </button>
-              <DeleteDialog onDelete={handleDelete}>
-                <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                  <span className="sr-only">Delete note</span>
-                  <TrashIcon
+            {/* Menu */}
+            {isAuthor && (
+              <div className="flex items-center sm:space-x-2">
+                <button
+                  onClick={toggleBookmark}
+                  className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                >
+                  <span className="sr-only">
+                    {note.bookmarked ? "Remove bookmark" : "Add bookmark"}
+                  </span>
+                  <BookmarkIcon
                     aria-hidden="true"
-                    className="w-6 h-6 text-brand from-rose-400 to-red-500"
-                    fill="url(#grad2)"
+                    className="w-6 h-6 text-brand from-indigo-400 to-purple-500"
+                    fill={note.bookmarked ? "url(#grad1)" : "none"}
+                    stroke={note.bookmarked ? "transparent" : "url(#grad1)"}
                   />
-                </Menu.Button>
-              </DeleteDialog>
+                </button>
+                <PublishedDialog
+                  url={`/${process.env.NEXTAUTH_URL}/notes/${note.id}`}
+                  published={note.published}
+                  disabled={loading}
+                  onPublishedChanged={handlePublishedChanged}
+                />
+                <DeleteDialog onDelete={handleDelete}>
+                  <Menu.Button className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                    <span className="sr-only">Delete note</span>
+                    <TrashIcon
+                      aria-hidden="true"
+                      className="w-6 h-6 text-brand from-rose-400 to-red-500"
+                      fill="url(#grad2)"
+                    />
+                  </Menu.Button>
+                </DeleteDialog>
 
-              {/* Seperator */}
-              <div className="w-px h-6 ml-1 mr-1 bg-gray-700 sm:mr-0 sm:ml-6"></div>
-              <Button
-                onClick={handleUpdate}
-                className="hover:bg-gray-800 active:bg-gray-900 border border-transparent transition-colors px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
-                loading={loading}
-              >
-                Save
-              </Button>
-              {/* <button
+                {/* Seperator */}
+                <div className="w-px h-6 ml-1 mr-1 bg-gray-700 sm:mr-0 sm:ml-6"></div>
+                <Button
+                  onClick={handleUpdate}
+                  className="hover:bg-gray-800 active:bg-gray-900 border border-transparent transition-colors px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
+                  loading={loading}
+                >
+                  Save
+                </Button>
+                {/* <button
                 onClick={handleUpdate}
                 className="hover:bg-gray-800 border border-transparent transition-colors px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
               >
                 Save
               </button> */}
-            </div>
+              </div>
+            )}
           </div>
 
           <div className="pt-6">
@@ -196,14 +206,16 @@ You can even add ***markdown*** or $LaTeX$
                 </TextareaAutosize>
               )}
 
-              <div className="absolute flex items-center justify-between space-x-2 top-2 right-2">
-                <button
-                  onClick={() => setPreviewActive((prev) => !prev)}
-                  className="hover:bg-gray-800 border border-gray-700 transition-colors px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
-                >
-                  {previewActive ? "Edit" : "Preview"}
-                </button>
-              </div>
+              {isAuthor && (
+                <div className="absolute flex items-center justify-between space-x-2 top-2 right-2">
+                  <button
+                    onClick={() => setPreviewActive((prev) => !prev)}
+                    className="hover:bg-gray-800 border border-gray-700 transition-colors px-3 py-1.5 bg-black rounded-md text-sm bg-opacity-40 backdrop-filter backdrop-blur-md"
+                  >
+                    {previewActive ? "Edit" : "Preview"}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </>
