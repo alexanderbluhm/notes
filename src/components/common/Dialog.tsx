@@ -2,6 +2,7 @@ import { Menu, Popover, Transition } from "@headlessui/react";
 import React, { useState } from "react";
 import { ClipboardIcon, LockIcon, LockOpenIcon } from "../icons";
 import { Switch } from "@/components/ui";
+import { useNotification } from "@/lib/useNotification";
 
 interface DeleteDialogProps {
   onDelete: () => void;
@@ -69,9 +70,21 @@ type PublishedDialogProps = {
   onPublishedChanged: (value: boolean) => void;
   published: boolean;
   disabled?: boolean;
+  url: string;
 };
 
 export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
+  const { addNotification } = useNotification();
+
+  const copyToClipboard = async () => {
+    await navigator.clipboard.writeText(props.url).catch(() => {
+      addNotification({
+        text: "Copy to clipboard not possible",
+        type: "error",
+      });
+    });
+    addNotification({ text: "Copied to clipboard", type: "info" });
+  };
 
   return (
     <Popover as="div" className="relative">
@@ -79,7 +92,7 @@ export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
         className="inline-flex p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200"
         as="button"
       >
-        <span className="sr-only">Managae visibility</span>
+        <span className="sr-only">Manage visibility</span>
         {!props.published && (
           <LockIcon
             aria-hidden="true"
@@ -118,10 +131,15 @@ export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
           </div>
           {props.published && (
             <div className="flex items-center px-4 pt-3 pb-2 space-x-2 overflow-hidden text-sm">
-              <span className="text-gray-400 truncate">
-                http://localhost:3000/notes/3b54d9f7-28ab-4552-a6c3-135bbb474b4c
-              </span>
-              <button className="flex-shrink-0 inline-flex -m-1.5 p-1.5 rounded-lg hover:bg-gray-800 transition-colors duration-200">
+              <input
+                readOnly
+                value={props.url}
+                className="text-gray-400 truncate bg-transparent focus:outline-none"
+              />
+              <button
+                onClick={copyToClipboard}
+                className="flex-shrink-0 inline-flex -m-1.5 p-1.5 rounded-lg hover:bg-gray-800 active:bg-gray-900 transition-colors duration-200"
+              >
                 <span className="sr-only">Copy note share link</span>
                 <ClipboardIcon className="w-6 h-6 text-white" />
               </button>

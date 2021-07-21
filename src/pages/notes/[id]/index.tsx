@@ -141,6 +141,7 @@ const Index = (props: Props) => {
                   />
                 </button>
                 <PublishedDialog
+                  url={`/${process.env.NEXTAUTH_URL}/notes/${note.id}`}
                   published={note.published}
                   disabled={loading}
                   onPublishedChanged={handlePublishedChanged}
