@@ -32,11 +32,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (!session) return res.status(401).send({});
     const { content, bookmarked, published } = req.body;
     const { id: noteId } = req.query;
-
     try {
-      const updatedNote = await prisma.note.update({
+      const updatedNote = await prisma.note.updateMany({
         where: {
           id: noteId.toString(),
+          author: {
+            id: session.id as string,
+          },
         },
         data: {
           content: content,
@@ -53,9 +55,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (!session) return res.status(401).send({});
     const { id: noteId } = req.query;
     try {
-      await prisma.note.delete({
+      await prisma.note.deleteMany({
         where: {
           id: noteId.toString(),
+          author: {
+            id: session.id as string,
+          },
         },
       });
       res.status(200).json({});
