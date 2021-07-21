@@ -5,7 +5,7 @@ interface Props {
   label: string;
   enabled: boolean;
   description?: string;
-  disbaled?: boolean;
+  disabled?: boolean;
   setEnabled: (value: boolean) => void;
 }
 
@@ -29,7 +29,7 @@ export const Switch = (props: Props) => {
         )}
       </span>
       <HeadlessSwitch
-        disabled={props.disbaled}
+        disabled={props.disabled}
         checked={props.enabled}
         onChange={props.setEnabled}
         className={`${

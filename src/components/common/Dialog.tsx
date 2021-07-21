@@ -109,7 +109,7 @@ export const PublishedDialog: React.FC<PublishedDialogProps> = (props) => {
           <div className="px-4 pt-2 pb-3">
             <h3 className="sr-only">Manage access for this note</h3>
             <Switch
-              disbaled={props.disabled}
+              disabled={props.disabled}
               label="Publish note"
               description="All people you share this link with can read this note."
               enabled={props.published}
