@@ -5,6 +5,7 @@ import useSWR, { mutate as _mutate } from "swr";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import gfm from 'remark-gfm'
 import "katex/dist/katex.min.css";
 import { formatRelative, parseISO } from "date-fns";
 import { BookmarkIcon, LockIcon, TrashIcon } from "@/components/icons";
@@ -202,7 +203,7 @@ const Index = (props: Props) => {
               {previewActive && (
                 <div className="py-2 prose">
                   <ReactMarkdown
-                    remarkPlugins={[remarkMath]}
+                    remarkPlugins={[remarkMath, gfm]}
                     rehypePlugins={[rehypeKatex]}
                     children={
                       content.length > 0

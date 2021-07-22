@@ -51,6 +51,13 @@ module.exports = {
             pre: {
               backgroundColor: colors.gray[900],
             },
+            thead: {
+              color: colors.gray[100],
+              borderBottomColor: colors.gray[700]
+            },
+            a: {
+              color: colors.indigo[500]
+            }
           },
         },
       },
