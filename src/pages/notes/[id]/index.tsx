@@ -1,6 +1,6 @@
 import { PublishedDialog, DeleteDialog, Navbar } from "@/components/common";
 import { useRouter } from "next/dist/client/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import useSWR, { mutate as _mutate } from "swr";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
@@ -14,6 +14,7 @@ import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui";
 import Link from "next/link";
 import { useSession } from "next-auth/client";
+import Prism from "prismjs";
 
 interface Props {}
 
@@ -24,6 +25,8 @@ const Index = (props: Props) => {
   const [previewActive, setPreviewActive] = useState(true);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
+  // we want to use this because we call Prisma after we called setContent
+  const resettingRef = useRef(false);
   const { id } = router.query;
   const {
     data: note,
@@ -37,8 +40,26 @@ const Index = (props: Props) => {
 
   // set content when note is loaded
   useEffect(() => {
-    if (note && note.content) setContent(note.content);
+    if (note && note.content) {
+      resettingRef.current = true;
+      setContent(note.content);
+    } 
   }, [note]);
+
+  // we set the ref above to true if we call setContent
+  // if then the content changes we call Prism
+  useEffect(() => {
+    if (resettingRef.current && content.length > 0) {
+      resettingRef.current = false;
+      Prism.highlightAll();
+    }
+  }, [content])
+
+  useEffect(() => {
+    if (previewActive && content.length > 0) {
+      Prism.highlightAll();
+    }
+  }, [previewActive])
 
   const toggleBookmark = async () => {
     const updated = { ...note, bookmarked: !note.bookmarked };
@@ -102,7 +123,7 @@ const Index = (props: Props) => {
     return (
       <div className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
         <div className="p-4 overflow-hidden text-sm font-light border rounded-md text-brand-red border-brand-red">
-          An error occured.{" "}
+          An error occurred.{" "}
           <Link href="/">
             <a className="font-normal underline">Back to home</a>
           </Link>{" "}
