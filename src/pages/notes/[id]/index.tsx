@@ -137,7 +137,7 @@ const Index = (props: Props) => {
     <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
       {note && (
         <>
-          <div className="flex items-center justify-between pb-6">
+          <div className="flex flex-col justify-between pb-6 space-y-2 sm:flex-row sm:space-y-0 sm:items-center">
             <div className="flex-1 overflow-hidden">
               {/* <Note.Item note={data} bookmark={() => {}} /> */}
               <h1 className="text-xl font-medium break-words">{note.title}</h1>
