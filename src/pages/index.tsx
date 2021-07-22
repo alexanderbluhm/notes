@@ -108,9 +108,9 @@ const Home = () => {
           <div className="divide-y divide-gray-800">
             <section
               aria-labelledby="bookmarked"
-              className="px-4 pb-8 space-y-4"
+              className="pb-8 space-y-4"
             >
-              <div className="flex items-end justify-between">
+              <div className="flex items-end justify-between px-4">
                 <h2
                   id="bookmarked"
                   className="z-10 block text-2xl font-bold isolate"
@@ -135,8 +135,8 @@ const Home = () => {
               </ul>
             </section>
 
-            <section aria-labelledby="latest" className="px-4 pt-8 space-y-4">
-              <div className="flex items-end justify-between">
+            <section aria-labelledby="latest" className="pt-8 space-y-4">
+              <div className="flex items-end justify-between px-4">
                 <h2
                   id="latest"
                   className="z-10 text-2xl font-bold isolate"

@@ -22,14 +22,14 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
   let Component: any = as;
 
   return (
-    <Component className="xl:w-[calc(5rem+100%)] w-[calc(2rem+100%)] relative flex items-baseline -ml-4 text-gray-200 group xl:-ml-16">
+    <Component className="relative flex items-baseline text-gray-200 group">
       <span
-        className="absolute w-8 mr-4 text-sm font-light text-white transition-opacity duration-500 opacity-0 top-4 right-1 group-hover:opacity-100 xl:text-gray-400 xl:static"
+        className="absolute z-20 text-sm font-light text-white transition-opacity duration-500 opacity-0 right-4 lg:-translate-x-full lg:-left-4 top-4 lg:group-hover:opacity-100 xl:text-gray-400"
       >
-        {format(parseISO(note.createdAt), "hh:mm")}
+        {format(parseISO(note.createdAt), "dd. MMM")}
       </span>
       <div
-        className="relative w-full xl:w-[calc(100%-3rem)]"
+        className="relative w-full"
         onMouseEnter={() => setActiveId(note.id)}
       >
         {note.id === activeId && (
