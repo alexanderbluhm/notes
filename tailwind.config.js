@@ -47,7 +47,10 @@ module.exports = {
             },
             strong: {
               color: colors.gray[300]
-            }
+            },
+            pre: {
+              backgroundColor: colors.gray[900],
+            },
           },
         },
       },
