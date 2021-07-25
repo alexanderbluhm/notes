@@ -219,6 +219,11 @@ You can even add ***markdown*** or $LaTeX$
 
               {!previewActive && (
                 <TextareaAutosize
+                  onDrop={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log(e.dataTransfer.files);
+                  }}
                   placeholder="Content ..."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
