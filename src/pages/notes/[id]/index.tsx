@@ -5,6 +5,7 @@ import useSWR, { mutate as _mutate } from "swr";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import gfm from 'remark-gfm'
 import "katex/dist/katex.min.css";
 import { formatRelative, parseISO } from "date-fns";
 import { BookmarkIcon, LockIcon, TrashIcon } from "@/components/icons";
@@ -136,7 +137,7 @@ const Index = (props: Props) => {
     <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
       {note && (
         <>
-          <div className="flex items-center justify-between pb-6">
+          <div className="flex flex-col justify-between pb-6 space-y-2 sm:flex-row sm:space-y-0 sm:items-center">
             <div className="flex-1 overflow-hidden">
               {/* <Note.Item note={data} bookmark={() => {}} /> */}
               <h1 className="text-xl font-medium break-words">{note.title}</h1>
@@ -202,7 +203,7 @@ const Index = (props: Props) => {
               {previewActive && (
                 <div className="py-2 prose">
                   <ReactMarkdown
-                    remarkPlugins={[remarkMath]}
+                    remarkPlugins={[remarkMath, gfm]}
                     rehypePlugins={[rehypeKatex]}
                     children={
                       content.length > 0

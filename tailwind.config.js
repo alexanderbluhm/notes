@@ -51,6 +51,19 @@ module.exports = {
             pre: {
               backgroundColor: colors.gray[900],
             },
+            thead: {
+              color: colors.gray[100],
+              borderBottomColor: colors.gray[600]
+            },
+            'tbody tr': {
+              borderBottomColor: colors.gray[800]
+            },
+            a: {
+              color: colors.indigo[500]
+            },
+            hr: {
+              borderColor: colors.gray[800]
+            }
           },
         },
       },

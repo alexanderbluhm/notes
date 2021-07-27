@@ -13,6 +13,9 @@ const Home = () => {
   const [noteText, setNoteText] = useState("");
   const { addNotification } = useNotification();
 
+  const bookmarked: Array<any> =
+    (data && data.filter((note) => note.bookmarked)) || [];
+
   const handleCreate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key == "Enter" && !e.shiftKey) {
       // we want to submit on enter and don't create a new line
@@ -106,11 +109,8 @@ const Home = () => {
           </section>
 
           <div className="divide-y divide-gray-800">
-            <section
-              aria-labelledby="bookmarked"
-              className="px-4 pb-8 space-y-4"
-            >
-              <div className="flex items-end justify-between">
+            <section aria-labelledby="bookmarked" className="pb-8 space-y-4">
+              <div className="flex items-end justify-between px-4">
                 <h2
                   id="bookmarked"
                   className="z-10 block text-2xl font-bold isolate"
@@ -119,28 +119,22 @@ const Home = () => {
                 </h2>
               </div>
               <ul className="space-y-3">
-                {data &&
-                  data
-                    .filter((note) => note.bookmarked)
-                    .map((note) => (
-                      <Note.Item
-                        as="li"
-                        key={note.id}
-                        bookmark={handleBookmark}
-                        note={note}
-                      />
-                    ))}
+                {bookmarked.map((note) => (
+                  <Note.Item
+                    as="li"
+                    key={note.id}
+                    bookmark={handleBookmark}
+                    note={note}
+                  />
+                ))}
 
                 {!data && !error && <li>Loading ...</li>}
               </ul>
             </section>
 
-            <section aria-labelledby="latest" className="px-4 pt-8 space-y-4">
-              <div className="flex items-end justify-between">
-                <h2
-                  id="latest"
-                  className="z-10 text-2xl font-bold isolate"
-                >
+            <section aria-labelledby="latest" className="pt-8 space-y-4">
+              <div className="flex items-end justify-between px-4">
+                <h2 id="latest" className="z-10 text-2xl font-bold isolate">
                   Latest
                 </h2>
               </div>
