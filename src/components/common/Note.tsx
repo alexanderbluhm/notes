@@ -24,7 +24,7 @@ const Item = ({ note, bookmark, as = "div" }: Props) => {
   return (
     <Component className="relative flex items-baseline text-gray-200 group">
       <span
-        className="absolute z-20 text-sm font-light text-white transition-opacity duration-500 opacity-0 right-4 lg:-translate-x-full lg:-left-4 top-4 lg:group-hover:opacity-100 xl:text-gray-400"
+        className="absolute z-20 text-sm font-light text-white transition-opacity duration-500 opacity-0 w-14 right-4 lg:-translate-x-full lg:-left-4 top-4 lg:group-hover:opacity-100 xl:text-gray-400"
       >
         {format(parseISO(note.createdAt), "dd. MMM")}
       </span>
