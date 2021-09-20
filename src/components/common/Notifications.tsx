@@ -1,7 +1,7 @@
 import { useNotification } from "@/lib/useNotification";
-import { Transition } from "@headlessui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Notification as NotificationType } from "@/types/notification";
+import { AnimatePresence, motion, Variants, Variant } from "framer-motion";
 
 interface Props {}
 
@@ -9,16 +9,21 @@ export const Notifications = (props: Props) => {
   const { notifications } = useNotification((state) => state);
 
   return (
-    <>
-      {notifications.map((notification) => (
-        <Notification key={notification.id} notification={notification} />
+    <AnimatePresence>
+      {notifications.map((notification, index) => (
+        <Notification
+          index={index}
+          key={notification.id}
+          notification={notification}
+        />
       ))}
-    </>
+    </AnimatePresence>
   );
 };
 
 type NotificationProps = {
   notification: NotificationType;
+  index: number;
 };
 
 const styles = {
@@ -26,39 +31,47 @@ const styles = {
   error: "bg-gradient-to-br from-red-500 to-rose-600",
 };
 
-const Notification: React.FC<NotificationProps> = ({ notification }) => {
+const variants: Variants = Array(4)
+  .fill("")
+  .reduce<Record<string, Variant>>((prev, curr, i) => {
+    prev[i.toString()] = {
+      opacity: 1 - 0.25 * i,
+      zIndex: 40 - 10 * i,
+      scale: 1 - 0.05 * i,
+      y: `${8 * i}px`,
+    };
+    return prev;
+  }, {} as Record<string, Variant>);
+
+const Notification: React.FC<NotificationProps> = ({ index, notification }) => {
   const { removeNotification } = useNotification((state) => state);
-  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setOpen(false);
-    }, notification.duration || 2000);
+      removeNotification(notification.id);
+    }, notification.duration || 2500);
     return () => {
       clearTimeout(timeout);
     };
   }, []);
 
   return (
-    <Transition
-      afterLeave={() => removeNotification(notification.id)}
-      appear={true}
-      show={open}
-      as={React.Fragment}
-      enter="transition duration-300 ease-out"
-      enterFrom="-translate-y-10 opacity-0"
-      enterTo="translate-y-0 opacity-100"
-      leave="transition duration-200 ease-out"
-      leaveFrom="translate-y-0 opacity-100"
-      leaveTo="-translate-y-8 opacity-0"
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: -20 }}
+      animate={index.toString()}
+      variants={variants}
+      exit={{ y: "-30px", opacity: 0, scale: 0.8, zIndex: 50 }}
+      transition={{
+        type: "spring",
+        stiffness: 300,
+        damping: 30,
+      }}
+      className={`fixed w-52 top-6 left-[calc(50%-7.5rem)] text-white text-sm py-2.5 shadow font-medium text-center ${
+        styles[notification.type]
+      } ${index === 0 ? "rounded-full" : "rounded-2xl text-opacity-0"}`}
     >
-      <div
-        className={`fixed top-6 text-sm px-5 py-2.5 font-medium rounded-full text-center left-1/2 -translate-x-1/2 ${
-          styles[notification.type]
-        }`}
-      >
-        {notification.text}
-      </div>
-    </Transition>
+      {notification.text}
+    </motion.div>
   );
 };

@@ -1,3 +1,2 @@
-export * from './FlexibleTextarea';
-export * from './Button';
-export * from './Switch';
+export * from './button';
+export * from './switch';

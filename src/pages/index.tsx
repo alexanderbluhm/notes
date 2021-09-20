@@ -1,20 +1,17 @@
-import Head from "next/head";
-import { Alert } from "@/components/common";
-import useSWR from "swr";
-import { AnimateSharedLayout, motion } from "framer-motion";
-import { Note } from "@/components/common";
-import { useState } from "react";
-import { FlexibleTextarea } from "@/components/ui";
-import { signIn } from "next-auth/client";
+import { Alert, Note, SubmitTextarea } from "@/components/common";
+import { Layout } from "@/layouts/layout";
 import { useNotification } from "@/lib/useNotification";
+import { AnimateSharedLayout } from "framer-motion";
+import { signIn } from "next-auth/client";
+import { useState } from "react";
+import useSWR from "swr";
 
 const Home = () => {
-  const { data, error, mutate } = useSWR("/api/notes");
+  const { data, error, mutate } = useSWR<Array<any>, any>("/api/notes");
   const [noteText, setNoteText] = useState("");
   const { addNotification } = useNotification();
 
-  const bookmarked: Array<any> =
-    (data && data.filter((note) => note.bookmarked)) || [];
+  const bookmarked: Array<any> = data.filter((note) => note.bookmarked) || [];
 
   const handleCreate = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key == "Enter" && !e.shiftKey) {
@@ -55,7 +52,6 @@ const Home = () => {
     if (index == -1) return;
     let note = data[index];
     note.bookmarked = !note.bookmarked;
-    // note.updatedAt = new Date().toISOString();
     let copy = data;
     copy.splice(index, 1);
     const sorted = [...copy, note].sort((note1, note2) =>
@@ -81,45 +77,59 @@ const Home = () => {
   };
 
   return (
-    <div className="text-white bg-black">
-      <Head>
-        <title>Notelist</title>
-        <meta key="description" content="Lightweight note app" />
-      </Head>
+    <Layout>
+      {error && error.status === 401 && (
+        <Alert onClick={signIn} text="Please login to create notes" />
+      )}
 
-      <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto space-y-8 lg:px-6 xl:pt-20">
-        {/* {!data && !error && <div>Loading ...</div>} */}
+      <AnimateSharedLayout>
+        <section aria-labelledby="add-new">
+          <h2 id="add-new" className="sr-only">
+            Add new note
+          </h2>
 
-        {error && error.status === 401 && (
-          <Alert onClick={signIn} text="Please login to create notes" />
-        )}
+          <SubmitTextarea
+            value={noteText}
+            setValue={setNoteText}
+            handleKeyDown={handleCreate}
+          />
+        </section>
 
-        <AnimateSharedLayout>
-          {/* {JSON.stringify(data)} */}
-          <section aria-labelledby="add-new">
-            <h2 id="add-new" className="sr-only">
-              Add new note
-            </h2>
+        <div className="mt-6 divide-y divide-gray-800">
+          <section aria-labelledby="bookmarked" className="pb-8 space-y-4">
+            <div className="flex items-end justify-between px-4">
+              <h2
+                id="bookmarked"
+                className="z-10 block text-2xl font-bold isolate"
+              >
+                Bookmarked
+              </h2>
+            </div>
+            <ul className="space-y-3">
+              {bookmarked.map((note) => (
+                <Note.Item
+                  as="li"
+                  key={note.id}
+                  bookmark={handleBookmark}
+                  note={note}
+                />
+              ))}
 
-            <FlexibleTextarea
-              value={noteText}
-              setValue={setNoteText}
-              handleKeyDown={handleCreate}
-            />
+              {data.length === 0 && !error && <li>Loading ...</li>}
+            </ul>
           </section>
 
-          <div className="divide-y divide-gray-800">
-            <section aria-labelledby="bookmarked" className="pb-8 space-y-4">
-              <div className="flex items-end justify-between px-4">
-                <h2
-                  id="bookmarked"
-                  className="z-10 block text-2xl font-bold isolate"
-                >
-                  Bookmarked
-                </h2>
-              </div>
-              <ul className="space-y-3">
-                {bookmarked.map((note) => (
+          <section aria-labelledby="latest" className="pt-8 space-y-4">
+            <div className="flex items-end justify-between px-4">
+              <h2 id="latest" className="z-10 text-2xl font-bold isolate">
+                Latest
+              </h2>
+            </div>
+
+            <ul className="space-y-3">
+              {data
+                .filter((note) => !note.bookmarked)
+                .map((note) => (
                   <Note.Item
                     as="li"
                     key={note.id}
@@ -128,39 +138,12 @@ const Home = () => {
                   />
                 ))}
 
-                {!data && !error && <li>Loading ...</li>}
-              </ul>
-            </section>
-
-            <section aria-labelledby="latest" className="pt-8 space-y-4">
-              <div className="flex items-end justify-between px-4">
-                <h2 id="latest" className="z-10 text-2xl font-bold isolate">
-                  Latest
-                </h2>
-              </div>
-
-              <ul className="space-y-3">
-                {data &&
-                  data
-                    .filter((note) => !note.bookmarked)
-                    .map((note) => (
-                      <Note.Item
-                        as="li"
-                        key={note.id}
-                        bookmark={handleBookmark}
-                        note={note}
-                      />
-                    ))}
-
-                {!data && !error && <li>Loading ...</li>}
-              </ul>
-            </section>
-          </div>
-        </AnimateSharedLayout>
-      </main>
-
-      <footer></footer>
-    </div>
+              {data.length === 0 && !error && <li>Loading ...</li>}
+            </ul>
+          </section>
+        </div>
+      </AnimateSharedLayout>
+    </Layout>
   );
 };
 

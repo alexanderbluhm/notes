@@ -29,6 +29,9 @@ const App = ({ Component, pageProps }) => {
             fetcher: fetcher,
             revalidateOnFocus: false,
             refreshInterval: 0,
+            fallback: {
+              '/api/notes': [],
+            }
           }}
         >
           <Notifications />

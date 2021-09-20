@@ -15,8 +15,8 @@ export const useNotification = create<NotificationState>((set) => ({
   addNotification: (notification) =>
     set((state) => ({
       notifications: [
-        { ...notification, id: Math.random().toString(36) },
         ...state.notifications,
+        { ...notification, id: Math.random().toString(36) },
       ],
     })),
   removeNotification: (id) =>

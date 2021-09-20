@@ -17,7 +17,7 @@ interface Props {
 
 const NAME = "note-input";
 
-export const FlexibleTextarea = ({ value, setValue, handleKeyDown }: Props) => {
+export const SubmitTextarea = ({ value, setValue, handleKeyDown }: Props) => {
   const { id: activeId, setActiveId } = useActiveId((state) => state);
   const ref = useRef<HTMLTextAreaElement>();
 

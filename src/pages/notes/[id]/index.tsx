@@ -1,21 +1,23 @@
-import { PublishedDialog, DeleteDialog, Navbar } from "@/components/common";
-import { useRouter } from "next/dist/client/router";
-import React, { useEffect, useRef, useState } from "react";
-import useSWR, { mutate as _mutate } from "swr";
-import ReactMarkdown from "react-markdown";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-import gfm from 'remark-gfm'
-import "katex/dist/katex.min.css";
-import { formatRelative, parseISO } from "date-fns";
-import { BookmarkIcon, LockIcon, TrashIcon } from "@/components/icons";
-import { Menu } from "@headlessui/react";
-import { useNotification } from "@/lib/useNotification";
-import TextareaAutosize from "react-textarea-autosize";
+import { DeleteDialog, PublishedDialog } from "@/components/common";
+import { BookmarkIcon, TrashIcon } from "@/components/icons";
 import { Button } from "@/components/ui";
-import Link from "next/link";
+import { Layout } from "@/layouts/layout";
+import { useNotification } from "@/lib/useNotification";
+import { Menu } from "@headlessui/react";
+import { formatRelative, parseISO } from "date-fns";
+import "katex/dist/katex.min.css";
 import { useSession } from "next-auth/client";
+import { useRouter } from "next/dist/client/router";
+import Link from "next/link";
 import Prism from "prismjs";
+import React, { useEffect, useRef, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import TextareaAutosize from "react-textarea-autosize";
+import rehypeKatex from "rehype-katex";
+import gfm from "remark-gfm";
+import remarkMath from "remark-math";
+import useSWR, { mutate as _mutate } from "swr";
+import Head from 'next/head';
 
 interface Props {}
 
@@ -44,7 +46,7 @@ const Index = (props: Props) => {
     if (note && note.content) {
       resettingRef.current = true;
       setContent(note.content);
-    } 
+    }
   }, [note]);
 
   // we set the ref above to true if we call setContent
@@ -54,13 +56,13 @@ const Index = (props: Props) => {
       resettingRef.current = false;
       Prism.highlightAll();
     }
-  }, [content])
+  }, [content]);
 
   useEffect(() => {
     if (previewActive && content.length > 0) {
       Prism.highlightAll();
     }
-  }, [previewActive])
+  }, [previewActive]);
 
   const toggleBookmark = async () => {
     const updated = { ...note, bookmarked: !note.bookmarked };
@@ -134,12 +136,11 @@ const Index = (props: Props) => {
     );
 
   return (
-    <main className="max-w-4xl px-4 pt-12 pb-12 mx-auto divide-y divide-gray-800 lg:px-6 xl:pt-20">
+    <Layout>
       {note && (
         <>
-          <div className="flex flex-col justify-between pb-6 space-y-2 sm:flex-row sm:space-y-0 sm:items-center">
+          <div className="flex flex-col justify-between pb-6 space-y-2 border-b border-gray-800 sm:flex-row sm:space-y-0 sm:items-center">
             <div className="flex-1 overflow-hidden">
-              {/* <Note.Item note={data} bookmark={() => {}} /> */}
               <h1 className="text-xl font-medium break-words">{note.title}</h1>
               <span className="text-sm text-gray-400">
                 {formatRelative(parseISO(note.createdAt), new Date())}
@@ -188,12 +189,6 @@ const Index = (props: Props) => {
                 >
                   Save
                 </Button>
-                {/* <button
-                onClick={handleUpdate}
-                className="hover:bg-gray-800 border border-transparent transition-colors px-3 py-1.5 bg-black rounded-md text-sm backdrop-filter backdrop-blur-md"
-              >
-                Save
-              </button> */}
               </div>
             )}
           </div>
@@ -242,7 +237,7 @@ You can even add ***markdown*** or $LaTeX$
           </div>
         </>
       )}
-    </main>
+    </Layout>
   );
 };
 
