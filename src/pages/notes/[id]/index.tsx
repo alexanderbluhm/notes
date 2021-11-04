@@ -204,8 +204,8 @@ const Index = (props: Props) => {
                       content.length > 0
                         ? content
                         : `
-Click on **edit** to add content to the note ✨  
-You can even add ***markdown*** or $LaTeX$ 
+Click on **edit** to add content to the note ✨
+You can even add ***markdown*** or $LaTeX$
                     `
                     }
                   />

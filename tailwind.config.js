@@ -63,6 +63,9 @@ module.exports = {
             },
             hr: {
               borderColor: colors.gray[800]
+            },
+            code: {
+                color: colors.gray[100],
             }
           },
         },

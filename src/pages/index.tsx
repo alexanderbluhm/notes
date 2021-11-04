@@ -115,7 +115,7 @@ const Home = () => {
                 />
               ))}
 
-              {data.length === 0 && !error && <li>Loading ...</li>}
+              {data.length === 0 && !error && <li className="px-4">Loading ...</li>}
             </ul>
           </section>
 
@@ -138,7 +138,7 @@ const Home = () => {
                   />
                 ))}
 
-              {data.length === 0 && !error && <li>Loading ...</li>}
+              {data.length === 0 && !error && <li className="px-4">Loading ...</li>}
             </ul>
           </section>
         </div>
