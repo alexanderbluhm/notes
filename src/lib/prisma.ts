@@ -6,16 +6,10 @@ import { PrismaClient } from "@prisma/client";
 // Learn more:
 // https://pris.ly/d/help/next-js-best-practices
 
-let prisma: PrismaClient;
+const prisma: PrismaClient = global.prisma || new PrismaClient();
 
-if (process.env.NODE_ENV === "production") {
-  prisma = new PrismaClient();
-} else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient({
-      log: ["query", "info", `warn`, `error`],
-    });
-  }
-  prisma = global.prisma;
+if (process.env.NODE_ENV === "development") {
+    global.prisma = prisma;
 }
+
 export default prisma;
